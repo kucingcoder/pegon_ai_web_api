@@ -1,3 +1,3 @@
-fn main() {
-    println!("Hello, world!");
-}
+mod controllers;
+mod middlewares;
+mod models;
