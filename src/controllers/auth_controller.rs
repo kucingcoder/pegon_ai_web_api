@@ -4,19 +4,37 @@ use rocket::http::{Cookie, CookieJar, SameSite, Status};
 use rocket::serde::json::Json;
 use rocket::{State, post};
 use sea_orm::*;
+use serde::{Deserialize, Serialize};
 use std::env;
 use uuid::Uuid;
 
-use crate::controllers::auth_structs::{GoogleLoginRequest, GoogleTokenPayload};
 use crate::models::sea_orm_active_enums::{Category, Gender};
 use crate::models::{prelude::*, users};
 
-#[post("/login", data="<data>")]
+// Request dari frontend
+// Saat user login pake Google, frontend ngirim token ini ke backend kita.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct GoogleLoginRequest {
+    pub id_token: String,
+}
+
+// Response dari Google API
+// Saat backend kita tanya ke Google: "Token ini punya siapa?", Google balas JSON ini.
+// Kita cuma butuh ambil field penting saja.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct GoogleTokenPayload {
+    pub aud: String,             // Audience (Harus cocok dengan Client ID kita)
+    pub email: String,           // Email user
+    pub name: String,            // Nama Lengkap
+    pub picture: Option<String>, // Foto Profil (Bisa ada bisa nggak)
+}
+
+#[post("/login", data = "<data>")]
 pub async fn login(
     db: &State<DatabaseConnection>,
     cookies: &CookieJar<'_>,
     data: Json<GoogleLoginRequest>,
-) -> Result<Json<users::Model>, Status> {
+) -> Result<Status, Status> {
     let db = db as &DatabaseConnection;
     let client = Client::new();
     let google_validation_url = "https://oauth2.googleapis.com/tokeninfo";
@@ -28,11 +46,11 @@ pub async fn login(
         .map_err(|_| Status::InternalServerError)?;
 
     if !resp.status().is_success() {
+        println!("Attack Attempt! Google token validation failed.",);
         return Err(Status::Unauthorized);
     }
 
     let payload: GoogleTokenPayload = resp.json().await.map_err(|_| Status::InternalServerError)?;
-
     let my_client_id = env::var("GOOGLE_CLIENT_ID").expect("GOOGLE_CLIENT_ID must be set");
     if payload.aud != my_client_id {
         println!("Attack Attempt! Token audience mismatch.");
@@ -50,7 +68,7 @@ pub async fn login(
         None => {
             let new_id = Uuid::new_v4();
             let new_user = users::ActiveModel {
-                id: Set(new_id.into()),
+                id: Set(new_id),
                 email: Set(payload.email),
                 full_name: Set(payload.name),
                 photo_profile: Set(payload.picture),
@@ -69,16 +87,13 @@ pub async fn login(
         }
     };
 
-    let user_id_str = Uuid::from_slice(&user.id)
-        .unwrap_or(Uuid::nil())
-        .to_string();
-    let mut cookie = Cookie::new("user_id", user_id_str);
+    let mut cookie = Cookie::new("user_id", user.id.to_string());
     cookie.set_secure(false);
     cookie.set_http_only(true);
     cookie.set_same_site(SameSite::Lax);
     cookie.set_path("/");
     cookies.add_private(cookie);
-    Ok(Json(user))
+    Ok(Status::Created)
 }
 
 #[get("/logout")]

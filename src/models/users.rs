@@ -4,12 +4,13 @@ use super::sea_orm_active_enums::Category;
 use super::sea_orm_active_enums::Gender;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Binary(16)")]
-    pub id: Vec<u8>,
+    pub id: Uuid,
     #[sea_orm(unique)]
     pub email: String,
     #[sea_orm(unique)]
