@@ -23,11 +23,16 @@ async fn rocket() -> _ {
     // build rocket
     rocket::build()
         .manage(db)
+        // landing page
+        .mount("/", routes![controllers::home_controller::index])
+        // file servers
+        .mount("/static", FileServer::from(relative!("static")))
         .mount("/images", FileServer::from(relative!("images")))
+        // api routes
         .mount(
             "/api",
             routes![
-                controllers::auth_controller::google_login,
+                controllers::auth_controller::login,
                 controllers::auth_controller::logout,
                 controllers::user_controller::get_profile,
                 controllers::user_controller::update_profile,

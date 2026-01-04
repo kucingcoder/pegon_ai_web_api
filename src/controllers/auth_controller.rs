@@ -11,8 +11,8 @@ use crate::controllers::auth_structs::{GoogleLoginRequest, GoogleTokenPayload};
 use crate::models::sea_orm_active_enums::{Category, Gender};
 use crate::models::{prelude::*, users};
 
-#[post("/auth/google", data = "<data>")]
-pub async fn google_login(
+#[post("/login", data="<data>")]
+pub async fn login(
     db: &State<DatabaseConnection>,
     cookies: &CookieJar<'_>,
     data: Json<GoogleLoginRequest>,
@@ -81,8 +81,8 @@ pub async fn google_login(
     Ok(Json(user))
 }
 
-#[post("/auth/logout")]
+#[get("/logout")]
 pub async fn logout(cookies: &CookieJar<'_>) -> Status {
     cookies.remove_private(Cookie::from("user_id"));
-    Status::Ok
+    Status::NoContent
 }
