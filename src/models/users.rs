@@ -2,6 +2,8 @@
 
 use super::sea_orm_active_enums::Category;
 use super::sea_orm_active_enums::Gender;
+use chrono::Utc;
+use sea_orm::ActiveValue::Set;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -54,4 +56,29 @@ impl Related<super::transactions::Entity> for Entity {
     }
 }
 
-impl ActiveModelBehavior for ActiveModel {}
+#[async_trait]
+impl ActiveModelBehavior for ActiveModel {
+    async fn before_save<C>(mut self, _db: &C, insert: bool) -> Result<Self, DbErr>
+    where
+        C: ConnectionTrait,
+    {
+        let now = Utc::now();
+
+        // Logika saat Insert (Data Baru)
+        if insert {
+            // 1. Generate UUID otomatis jika belum di-set manual
+            if self.id.is_not_set() {
+                self.id = Set(Uuid::new_v4());
+            }
+
+            // 2. Set created_at ke waktu sekarang
+            self.created_at = Set(Some(now));
+        }
+
+        // Logika saat Insert DAN Update
+        // 3. Selalu update updated_at ke waktu sekarang
+        self.updated_at = Set(Some(now));
+
+        Ok(self)
+    }
+}

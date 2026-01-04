@@ -6,7 +6,6 @@ use rocket::{State, post};
 use sea_orm::*;
 use serde::{Deserialize, Serialize};
 use std::env;
-use uuid::Uuid;
 
 use crate::models::sea_orm_active_enums::{Category, Gender};
 use crate::models::{prelude::*, users};
@@ -66,9 +65,7 @@ pub async fn login(
     let user = match user_opt {
         Some(existing_user) => existing_user,
         None => {
-            let new_id = Uuid::new_v4();
             let new_user = users::ActiveModel {
-                id: Set(new_id),
                 email: Set(payload.email),
                 full_name: Set(payload.name),
                 photo_profile: Set(payload.picture),
