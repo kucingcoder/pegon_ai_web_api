@@ -6,7 +6,6 @@ use rocket::serde::json::Json;
 use rocket::{State, get, post};
 use sea_orm::*;
 use std::env;
-use std::fs;
 use std::path::Path;
 use uuid::Uuid;
 
@@ -32,12 +31,7 @@ pub async fn get_profile(
         .map_err(|_| Status::InternalServerError)?;
 
     match user {
-        Some(mut user) => {
-            if let Some(ref path) = user.photo_profile {
-                user.photo_profile = Some(make_full_url(path));
-            }
-            Ok(Json(user))
-        }
+        Some(user) => Ok(Json(user)),
         None => Err(Status::NotFound),
     }
 }
@@ -47,7 +41,7 @@ pub struct UpdateProfileRequest<'r> {
     pub full_name: String,
     pub gender: String,
     pub date_of_birth: String,
-    pub photo: Option<TempFile<'r>>,
+    pub photo_profile: Option<TempFile<'r>>,
 }
 
 #[post("/profile/update", data = "<form>")]
@@ -55,7 +49,7 @@ pub async fn update_profile(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
     mut form: Form<UpdateProfileRequest<'_>>,
-) -> Result<Json<users::Model>, (Status, String)> {
+) -> Result<Status, (Status, String)> {
     let db = db as &DatabaseConnection;
 
     let user_model = Users::find_by_id(auth.id)
@@ -67,7 +61,7 @@ pub async fn update_profile(
     let mut user: users::ActiveModel = user_model.into();
     user.full_name = Set(form.full_name.clone());
     let gender_enum = match form.gender.as_str() {
-        "male" | "Laki-laki" => Gender::Male,
+        "Male" | "male" => Gender::Male,
         _ => Gender::Female,
     };
     user.gender = Set(gender_enum);
@@ -80,7 +74,7 @@ pub async fn update_profile(
     })?;
     user.date_of_birth = Set(dob);
 
-    if let Some(ref mut file) = form.photo {
+    if let Some(ref mut file) = form.photo_profile {
         let file_len = file.len();
         if file_len > 2 * 1024 * 1024 {
             return Err((Status::PayloadTooLarge, "Maksimal 2MB".to_string()));
@@ -98,28 +92,19 @@ pub async fn update_profile(
         };
 
         let upload_dir = "images/photo_profiles";
-        if !Path::new(upload_dir).exists() {
-            fs::create_dir_all(upload_dir)
-                .map_err(|_| (Status::InternalServerError, "Gagal buat folder".to_string()))?;
-        }
-
         let filename = format!("{}.{}", Uuid::new_v4(), ext);
         let save_path = Path::new(upload_dir).join(&filename);
 
         file.persist_to(&save_path)
             .await
             .map_err(|_| (Status::InternalServerError, "Gagal simpan file".to_string()))?;
-        user.photo_profile = Set(Some(format!("photo_profiles/{}", filename)));
+
+        user.photo_profile = Set(Some(make_full_url(&format!("photo_profiles/{}", filename))));
     }
 
-    let mut updated_user = user
-        .update(db)
+    user.update(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Gagal update DB".to_string()))?;
 
-    if let Some(ref path) = updated_user.photo_profile {
-        updated_user.photo_profile = Some(make_full_url(path));
-    }
-
-    Ok(Json(updated_user))
+    Ok(Status::Ok)
 }
