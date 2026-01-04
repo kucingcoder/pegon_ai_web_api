@@ -8,7 +8,7 @@ use std::env;
 use uuid::Uuid;
 
 use crate::controllers::auth_structs::{GoogleLoginRequest, GoogleTokenPayload};
-use crate::models::sea_orm_active_enums::{GenderEnum, StatusPremiumEnum};
+use crate::models::sea_orm_active_enums::{Category, Gender};
 use crate::models::{prelude::*, users};
 
 #[post("/auth/google", data = "<data>")]
@@ -50,13 +50,13 @@ pub async fn google_login(
         None => {
             let new_id = Uuid::new_v4();
             let new_user = users::ActiveModel {
-                id: Set(new_id),
+                id: Set(new_id.into()),
                 email: Set(payload.email),
                 full_name: Set(payload.name),
                 photo_profile: Set(payload.picture),
-                gender: Set(GenderEnum::Male),
+                gender: Set(Gender::Male),
                 date_of_birth: Set(NaiveDate::from_ymd_opt(2000, 1, 1).unwrap()),
-                status: Set(StatusPremiumEnum::Standard),
+                category: Set(Category::Standard),
                 learning_level: Set(1),
                 learning_stage_level: Set(1),
                 ..Default::default()
@@ -69,7 +69,10 @@ pub async fn google_login(
         }
     };
 
-    let mut cookie = Cookie::new("user_id", user.id.to_string());
+    let user_id_str = Uuid::from_slice(&user.id)
+        .unwrap_or(Uuid::nil())
+        .to_string();
+    let mut cookie = Cookie::new("user_id", user_id_str);
     cookie.set_secure(false);
     cookie.set_http_only(true);
     cookie.set_same_site(SameSite::Lax);

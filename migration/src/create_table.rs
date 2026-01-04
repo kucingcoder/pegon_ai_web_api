@@ -27,15 +27,24 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Users::FullName).string().not_null())
                     .col(
                         ColumnDef::new(Users::Gender)
-                            .enumeration(GenderEnum::Table, [GenderEnum::Male, GenderEnum::Female])
+                            .enumeration(
+                                GenderEnum::Table,
+                                [
+                                    GenderEnum::Male,
+                                    GenderEnum::Female
+                                ],
+                            )
                             .not_null(),
                     )
                     .col(ColumnDef::new(Users::DateOfBirth).date().not_null())
                     .col(
-                        ColumnDef::new(Users::Status)
+                        ColumnDef::new(Users::Category)
                             .enumeration(
-                                StatusPremiumEnum::Table,
-                                [StatusPremiumEnum::Standard, StatusPremiumEnum::Premium],
+                                CategoryEnum::Table,
+                                [
+                                    CategoryEnum::Standard,
+                                    CategoryEnum::Premium
+                                ],
                             )
                             .not_null()
                             .default("standard"),
@@ -175,11 +184,11 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Transactions::Status)
                             .enumeration(
-                                StatusTransactionEnum::Table,
+                                StatusEnum::Table,
                                 [
-                                    StatusTransactionEnum::Success,
-                                    StatusTransactionEnum::Pending,
-                                    StatusTransactionEnum::Canceled,
+                                    StatusEnum::Success,
+                                    StatusEnum::Pending,
+                                    StatusEnum::Canceled,
                                 ],
                             )
                             .not_null()
@@ -229,7 +238,7 @@ enum Users {
     FullName,
     Gender,
     DateOfBirth,
-    Status,
+    Category,
     LearningLevel,
     LearningStageLevel,
     CreatedAt,
@@ -281,14 +290,14 @@ enum GenderEnum {
 }
 
 #[derive(Iden)]
-enum StatusPremiumEnum {
+enum CategoryEnum {
     Table,
     Standard,
     Premium,
 }
 
 #[derive(Iden)]
-enum StatusTransactionEnum {
+enum StatusEnum {
     Table,
     Success,
     Pending,

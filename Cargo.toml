@@ -4,7 +4,7 @@ version = "1.0.0"
 edition = "2024"
 
 [dependencies]
-rocket = { version = "0.5.1", features = ["json"] }
+rocket = { version = "0.5.1", features = ["json", "secrets"] }
 sea-orm = { version = "^1.0.0", features = [
     "sqlx-mysql",
     "runtime-tokio-rustls",

@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
-use rocket::http::{ContentType, Status};
+use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::{State, get, post};
 use sea_orm::*;
@@ -10,8 +10,8 @@ use std::fs;
 use std::path::Path;
 use uuid::Uuid;
 
-use crate::middleware::auth_guard::AuthenticatedUser;
-use crate::models::sea_orm_active_enums::{GenderEnum, StatusPremiumEnum};
+use crate::middlewares::auth_guard::AuthenticatedUser;
+use crate::models::sea_orm_active_enums::Gender;
 use crate::models::{prelude::*, users};
 
 fn make_full_url(path: &str) -> String {
@@ -31,7 +31,7 @@ pub async fn get_profile(
         .await
         .map_err(|_| Status::InternalServerError)?;
 
-    match user_opt {
+    match user {
         Some(mut user) => {
             if let Some(ref path) = user.photo_profile {
                 user.photo_profile = Some(make_full_url(path));
@@ -67,8 +67,8 @@ pub async fn update_profile(
     let mut user: users::ActiveModel = user_model.into();
     user.full_name = Set(form.full_name.clone());
     let gender_enum = match form.gender.as_str() {
-        "male" | "Laki-laki" => GenderEnum::Male,
-        _ => GenderEnum::Female,
+        "male" | "Laki-laki" => Gender::Male,
+        _ => Gender::Female,
     };
     user.gender = Set(gender_enum);
 
