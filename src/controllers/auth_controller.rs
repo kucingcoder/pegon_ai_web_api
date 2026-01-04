@@ -93,7 +93,7 @@ pub async fn login(
     cookie.set_same_site(SameSite::Lax);
     cookie.set_path("/");
     cookies.add_private(cookie);
-    Ok(Status::Created)
+    Ok(Status::Ok)
 }
 
 #[get("/logout")]
