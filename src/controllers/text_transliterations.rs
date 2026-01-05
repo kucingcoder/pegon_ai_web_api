@@ -1,10 +1,11 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
-use crate::models::{prelude::*, text_transliterations};
+use crate::models::{prelude::*, text_transliterations, users};
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, post};
 use sea_orm::*;
+use sea_orm::{EntityTrait, QuerySelect};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -21,14 +22,17 @@ pub async fn transliterate(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_model = Users::find_by_id(auth.id)
+    let user_category: Category = Users::find_by_id(auth.id)
+        .select_only()
+        .column(users::Column::Category)
+        .into_tuple()
         .one(db)
         .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
-    // jika user standard hanya boleh transliterate 3 kali dalam sehari
-    if user_model.category == Category::Standard {
+    // jika user standard hanya boleh transliterate 10 kali dalam sehari
+    if user_category == Category::Standard {
         let today_start = chrono::Utc::now()
             .date_naive()
             .and_hms_opt(0, 0, 0)
@@ -41,7 +45,7 @@ pub async fn transliterate(
             .await
             .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
-        if count >= 3 {
+        if count >= 10 {
             return Err((
                 Status::Forbidden,
                 "Transliteration limit reached".to_string(),
