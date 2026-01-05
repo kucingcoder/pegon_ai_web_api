@@ -210,6 +210,24 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(Learn::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(Learn::Id)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(ColumnDef::new(Learn::Level).integer().not_null())
+                    .col(ColumnDef::new(Learn::MaxStage).integer().not_null())
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 
@@ -225,6 +243,9 @@ impl MigrationTrait for Migration {
             .await?;
         manager
             .drop_table(Table::drop().table(Users::Table).to_owned())
+            .await?;
+        manager
+            .drop_table(Table::drop().table(Learn::Table).to_owned())
             .await?;
         Ok(())
     }
@@ -305,4 +326,12 @@ enum StatusEnum {
     Success,
     Pending,
     Canceled,
+}
+
+#[derive(DeriveIden)]
+enum Learn {
+    Table,
+    Id,
+    Level,
+    MaxStage,
 }
