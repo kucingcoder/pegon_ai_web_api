@@ -37,6 +37,7 @@ async fn rocket() -> _ {
                 controllers::auth_controller::logout,
                 controllers::user_controller::get_profile,
                 controllers::user_controller::update_profile,
+                controllers::text_transliterations::transliterate
             ],
         )
 }
