@@ -2,7 +2,7 @@ use chrono::NaiveDate;
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::Status;
-use rocket::serde::json::Json;
+use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, get, post};
 use sea_orm::*;
 use std::env;
@@ -22,17 +22,27 @@ fn make_full_url(path: &str) -> String {
 pub async fn get_profile(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
-) -> Result<Json<users::Model>, Status> {
+) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
     let user = Users::find_by_id(auth.id)
         .one(db)
         .await
-        .map_err(|_| Status::InternalServerError)?;
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     match user {
-        Some(user) => Ok(Json(user)),
-        None => Err(Status::NotFound),
+        Some(user) => Ok(Json(json!({
+            "full_name": user.full_name,
+            "gender": user.gender,
+            "date_of_birth": user.date_of_birth,
+            "photo_profile": user.photo_profile,
+            "learning_level": user.learning_level,
+            "learning_stage_level": user.learning_stage_level,
+            "category": user.category,
+            "created_at": user.created_at,
+            "expired_at": user.expired_at
+        }))),
+        None => Err((Status::NotFound, "User not found".to_string())),
     }
 }
 
