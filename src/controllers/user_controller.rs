@@ -4,6 +4,7 @@ use rocket::fs::TempFile;
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, get, post};
+use sea_orm::sea_query::{Expr, Func};
 use sea_orm::*;
 use std::env;
 use std::path::Path;
@@ -11,7 +12,7 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Gender;
-use crate::models::{prelude::*, users};
+use crate::models::{image_transliterations, prelude::*, text_transliterations, users};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -44,6 +45,76 @@ pub async fn get_profile(
         }))),
         None => Err((Status::NotFound, "User not found".to_string())),
     }
+}
+
+#[get("/profile/detail")]
+pub async fn get_profile_detail(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+) -> Result<Json<Value>, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    // data diri user
+    let user_model = Users::find_by_id(auth.id)
+        .one(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .ok_or((Status::NotFound, "User not found".to_string()))?;
+
+    // data statistik text transliteration
+    let text_transliteration_count = TextTransliterations::find()
+        .filter(text_transliterations::Column::IdUser.eq(auth.id))
+        .count(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    // data statistik image transliteration
+    let image_transliteration_count = ImageTransliterations::find()
+        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+        .count(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    // Riwayat image transliteration
+    let image_transliterations = ImageTransliterations::find()
+        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+        .order_by_desc(image_transliterations::Column::CreatedAt)
+        .limit(5)
+        .select_only()
+        .column(image_transliterations::Column::Id)
+        .column(image_transliterations::Column::Title)
+        .column(image_transliterations::Column::Image)
+        .column(image_transliterations::Column::CreatedAt)
+        .column_as(
+            Expr::expr(
+                Func::cust("SUBSTRING")
+                    .arg(Expr::col(image_transliterations::Column::Result))
+                    .arg(1)
+                    .arg(100),
+            ),
+            "result",
+        )
+        .into_json()
+        .all(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    Ok(Json(json!({
+        "user": {
+            "full_name": user_model.full_name,
+            "gender": user_model.gender,
+            "date_of_birth": user_model.date_of_birth,
+            "photo_profile": user_model.photo_profile,
+            "learning_level": user_model.learning_level,
+            "learning_stage_level": user_model.learning_stage_level,
+            "category": user_model.category,
+            "created_at": user_model.created_at,
+            "expired_at": user_model.expired_at
+        },
+        "text_transliteration_count": text_transliteration_count,
+        "image_transliteration_count": image_transliteration_count,
+        "image_transliterations": image_transliterations
+    })))
 }
 
 #[derive(FromForm)]

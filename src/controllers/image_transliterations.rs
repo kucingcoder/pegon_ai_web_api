@@ -3,7 +3,9 @@ use rocket::fs::TempFile;
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, post};
+use sea_orm::sea_query::{Expr, Func};
 use sea_orm::*;
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::Path;
 use uuid::Uuid;
@@ -87,7 +89,7 @@ pub async fn transliterate(
     let url = make_full_url(&format!("transliterations/{}", filename));
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
-    image_transliterations::ActiveModel {
+    let new_image_transliteration = image_transliterations::ActiveModel {
         id_user: Set(auth.id),
         image: Set(url),
         title: Set(title),
@@ -99,7 +101,7 @@ pub async fn transliterate(
     .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     Ok(Json(json!({
-        "result": result
+        "history": new_image_transliteration.id,
     })))
 }
 
@@ -112,55 +114,114 @@ pub async fn history(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    // Default page = 1, default limit = 10
     let page = page.unwrap_or(1);
     let limit = limit.unwrap_or(10);
 
-    // Setup Query
     let paginator = ImageTransliterations::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .order_by_desc(image_transliterations::Column::CreatedAt)
+        .select_only()
+        .column(image_transliterations::Column::Id)
+        .column(image_transliterations::Column::Title)
+        .column(image_transliterations::Column::Image)
+        .column(image_transliterations::Column::CreatedAt)
+        .column_as(
+            Expr::expr(
+                Func::cust("SUBSTRING")
+                    .arg(Expr::col(image_transliterations::Column::Result))
+                    .arg(1)
+                    .arg(100),
+            ),
+            "result",
+        )
+        .into_json()
         .paginate(db, limit);
 
-    // Ambil data halaman spesifik
-    // Gunakan saturating_sub agar tidak panic jika user kirim page 0
+    let total_pages = paginator.num_pages().await.map_err(|_| {
+        (
+            Status::InternalServerError,
+            "Gagal menghitung halaman".to_string(),
+        )
+    })?;
+
     let pagination_result = paginator.fetch_page(page.saturating_sub(1)).await;
 
     match pagination_result {
-        Ok(items) => {
-            let history_data: Vec<Value> = items
-                .into_iter()
-                .map(|item| {
-                    let result_truncated: String = item.result.chars().take(100).collect();
-                    let final_result = if item.result.chars().count() > 100 {
-                        format!("{}...", result_truncated)
-                    } else {
-                        result_truncated
-                    };
-
-                    json!({
-                        "title": item.title,
-                        "image": item.image,
-                        "created_at": item.created_at,
-                        "result": final_result
-                    })
-                })
-                .collect();
-
-            let total_pages = paginator.num_pages().await.unwrap_or(0);
-
-            Ok(Json(json!({
-                "data": history_data,
-                "meta": {
-                    "current_page": page,
-                    "per_page": limit,
-                    "total_pages": total_pages
-                }
-            })))
-        }
+        Ok(items) => Ok(Json(json!({
+            "data": items,
+            "meta": {
+                "current_page": page,
+                "per_page": limit,
+                "total_pages": total_pages
+            }
+        }))),
         Err(_) => Err((
             Status::InternalServerError,
             "Gagal mengambil data riwayat".to_string(),
         )),
     }
+}
+
+#[get("/transliteration/image/history/read?<id>")]
+pub async fn read(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+    id: String,
+) -> Result<Json<Value>, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    let parsed_id = Uuid::parse_str(&id)
+        .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
+
+    let image_transliteration = ImageTransliterations::find()
+        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+        .filter(image_transliterations::Column::Id.eq(parsed_id))
+        .one(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .ok_or((Status::NotFound, "Data not found".to_string()))?;
+
+    Ok(Json(json!({
+        "title": image_transliteration.title,
+        "image": image_transliteration.image,
+        "result": image_transliteration.result,
+        "created_at": image_transliteration.created_at
+    })))
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UpdateTitleRequest {
+    pub id: String,
+    pub title: String,
+}
+
+#[post("/transliteration/image/history/update-title", data = "<data>")]
+pub async fn update_title(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+    data: Json<UpdateTitleRequest>,
+) -> Result<Status, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    let parsed_id = Uuid::parse_str(&data.id)
+        .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
+
+    let image_transliteration = ImageTransliterations::find()
+        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+        .filter(image_transliterations::Column::Id.eq(parsed_id))
+        .one(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .ok_or((Status::NotFound, "Data not found".to_string()))?;
+
+    let mut image_transliteration: image_transliterations::ActiveModel =
+        image_transliteration.into();
+    image_transliteration.title = Set(data.title.clone());
+
+    image_transliteration
+        .update(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    Ok(Status::Ok)
 }
