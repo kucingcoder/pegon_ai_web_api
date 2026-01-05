@@ -11,7 +11,6 @@ use uuid::Uuid;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Binary(16)")]
     pub id: Uuid,
-
     #[sea_orm(column_type = "Binary(16)")]
     pub id_user: Uuid,
     #[sea_orm(column_type = "Text")]

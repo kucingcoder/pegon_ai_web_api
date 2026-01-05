@@ -20,6 +20,7 @@ async fn rocket() -> _ {
     // buat folder images kalo belum ada
     std::fs::create_dir_all("images").expect("Gagal buat folder images");
     std::fs::create_dir_all("images/photo_profiles").expect("Gagal buat folder photo_profiles");
+    std::fs::create_dir_all("images/transliterations").expect("Gagal buat folder transliterations");
 
     // build rocket
     rocket::build()
@@ -37,7 +38,8 @@ async fn rocket() -> _ {
                 controllers::auth_controller::logout,
                 controllers::user_controller::get_profile,
                 controllers::user_controller::update_profile,
-                controllers::text_transliterations::transliterate
+                controllers::text_transliterations::transliterate,
+                controllers::image_transliterations::transliterate
             ],
         )
 }
