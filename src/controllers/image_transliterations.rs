@@ -2,7 +2,7 @@ use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
-use rocket::{State, post};
+use rocket::{State, patch, post};
 use sea_orm::sea_query::{Expr, Func};
 use sea_orm::*;
 use serde::{Deserialize, Serialize};
@@ -195,7 +195,7 @@ pub struct UpdateTitleRequest {
     pub title: String,
 }
 
-#[post("/transliteration/image/history/update-title", data = "<data>")]
+#[patch("/transliteration/image/history/update-title", data = "<data>")]
 pub async fn update_title(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,

@@ -3,7 +3,7 @@ use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
-use rocket::{State, get, post};
+use rocket::{State, get, patch};
 use sea_orm::sea_query::{Expr, Func};
 use sea_orm::*;
 use std::env;
@@ -125,7 +125,7 @@ pub struct UpdateProfileRequest<'r> {
     pub photo_profile: Option<TempFile<'r>>,
 }
 
-#[post("/profile/update", data = "<form>")]
+#[patch("/profile/update", data = "<form>")]
 pub async fn update_profile(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
