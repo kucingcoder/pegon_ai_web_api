@@ -39,7 +39,8 @@ async fn rocket() -> _ {
                 controllers::user_controller::get_profile,
                 controllers::user_controller::update_profile,
                 controllers::text_transliterations::transliterate,
-                controllers::image_transliterations::transliterate
+                controllers::image_transliterations::transliterate,
+                controllers::image_transliterations::history
             ],
         )
 }

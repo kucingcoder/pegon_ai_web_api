@@ -85,25 +85,82 @@ pub async fn transliterate(
 
     let result = "lorem ipsum".to_string();
     let url = make_full_url(&format!("transliterations/{}", filename));
-    let title = chrono::Utc::now()
-        .format("%d - %m - %Y : %H:%M")
-        .to_string();
+    let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
-    let new_transliteration = image_transliterations::ActiveModel {
-        id: Set(Uuid::new_v4()),
+    image_transliterations::ActiveModel {
         id_user: Set(auth.id),
         image: Set(url),
         title: Set(title),
         result: Set(result.clone()),
         ..Default::default()
-    };
-
-    image_transliterations::Entity::insert(new_transliteration)
-        .exec(db)
-        .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+    }
+    .insert(db)
+    .await
+    .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     Ok(Json(json!({
         "result": result
     })))
+}
+
+#[get("/transliteration/image/history?<page>&<limit>")]
+pub async fn history(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+    page: Option<u64>,
+    limit: Option<u64>,
+) -> Result<Json<Value>, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    // Default page = 1, default limit = 10
+    let page = page.unwrap_or(1);
+    let limit = limit.unwrap_or(10);
+
+    // Setup Query
+    let paginator = ImageTransliterations::find()
+        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+        .order_by_desc(image_transliterations::Column::CreatedAt)
+        .paginate(db, limit);
+
+    // Ambil data halaman spesifik
+    // Gunakan saturating_sub agar tidak panic jika user kirim page 0
+    let pagination_result = paginator.fetch_page(page.saturating_sub(1)).await;
+
+    match pagination_result {
+        Ok(items) => {
+            let history_data: Vec<Value> = items
+                .into_iter()
+                .map(|item| {
+                    let result_truncated: String = item.result.chars().take(100).collect();
+                    let final_result = if item.result.chars().count() > 100 {
+                        format!("{}...", result_truncated)
+                    } else {
+                        result_truncated
+                    };
+
+                    json!({
+                        "title": item.title,
+                        "image": item.image,
+                        "created_at": item.created_at,
+                        "result": final_result
+                    })
+                })
+                .collect();
+
+            let total_pages = paginator.num_pages().await.unwrap_or(0);
+
+            Ok(Json(json!({
+                "data": history_data,
+                "meta": {
+                    "current_page": page,
+                    "per_page": limit,
+                    "total_pages": total_pages
+                }
+            })))
+        }
+        Err(_) => Err((
+            Status::InternalServerError,
+            "Gagal mengambil data riwayat".to_string(),
+        )),
+    }
 }
