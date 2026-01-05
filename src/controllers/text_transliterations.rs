@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TextTransliterationRequest {
     pub text: String,
+    pub harakat: bool,
 }
 
 #[post("/transliteration/text", data = "<data>")]
@@ -49,11 +50,17 @@ pub async fn transliterate(
     }
 
     // transliterate text
+    let instrution = if data.harakat {
+        "dengan harakat".to_string()
+    } else {
+        "tanpa harakat".to_string()
+    };
     let generated_result = "hello world".to_string();
 
     // simpan hasil transliteration
     text_transliterations::ActiveModel {
         id_user: Set(auth.id),
+        instruction: Set(instrution.clone()),
         input: Set(data.text.clone()),
         result: Set(generated_result.clone()),
         ..Default::default()

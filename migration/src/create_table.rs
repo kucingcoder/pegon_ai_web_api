@@ -27,13 +27,7 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Users::FullName).string().not_null())
                     .col(
                         ColumnDef::new(Users::Gender)
-                            .enumeration(
-                                GenderEnum::Table,
-                                [
-                                    GenderEnum::Male,
-                                    GenderEnum::Female
-                                ],
-                            )
+                            .enumeration(GenderEnum::Table, [GenderEnum::Male, GenderEnum::Female])
                             .not_null(),
                     )
                     .col(ColumnDef::new(Users::DateOfBirth).date().not_null())
@@ -41,10 +35,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Users::Category)
                             .enumeration(
                                 CategoryEnum::Table,
-                                [
-                                    CategoryEnum::Standard,
-                                    CategoryEnum::Premium
-                                ],
+                                [CategoryEnum::Standard, CategoryEnum::Premium],
                             )
                             .not_null()
                             .default("standard"),
@@ -105,6 +96,11 @@ impl MigrationTrait for Migration {
                             .timestamp()
                             .null(),
                     )
+                    .col(
+                        ColumnDef::new(ImageTransliterations::UpdatedAt)
+                            .timestamp()
+                            .null(),
+                    )
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk-image-trans-user-id")
@@ -131,6 +127,11 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(TextTransliterations::IdUser)
                             .uuid()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(TextTransliterations::Instruction)
+                            .text()
                             .not_null(),
                     )
                     .col(
@@ -255,6 +256,7 @@ enum ImageTransliterations {
     Title,
     Result,
     CreatedAt,
+    UpdatedAt,
 }
 
 #[derive(Iden)]
@@ -262,6 +264,7 @@ enum TextTransliterations {
     Table,
     Id,
     IdUser,
+    Instruction,
     Input,
     Result,
     CreatedAt,

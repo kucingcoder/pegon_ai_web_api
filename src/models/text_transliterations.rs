@@ -14,7 +14,8 @@ pub struct Model {
 
     #[sea_orm(column_type = "Binary(16)")]
     pub id_user: Uuid,
-
+    #[sea_orm(column_type = "Text")]
+    pub instruction: String,
     #[sea_orm(column_type = "Text")]
     pub input: String,
     #[sea_orm(column_type = "Text")]
