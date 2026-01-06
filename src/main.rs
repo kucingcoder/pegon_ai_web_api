@@ -43,7 +43,8 @@ async fn rocket() -> _ {
                 controllers::image_transliterations::transliterate,
                 controllers::image_transliterations::history,
                 controllers::image_transliterations::read,
-                controllers::image_transliterations::update_title
+                controllers::image_transliterations::update_title,
+                controllers::checks_controller::check_read
             ],
         )
 }
