@@ -12,7 +12,7 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Gender;
-use crate::models::{image_transliterations, prelude::*, text_transliterations, users};
+use crate::models::{image_transliterations, text_transliterations, users};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -26,7 +26,7 @@ pub async fn get_profile(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user = Users::find_by_id(auth.id)
+    let user = users::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
@@ -55,28 +55,28 @@ pub async fn get_profile_detail(
     let db = db as &DatabaseConnection;
 
     // data diri user
-    let user_model = Users::find_by_id(auth.id)
+    let user_model = users::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
     // data statistik text transliteration
-    let text_transliteration_count = TextTransliterations::find()
+    let text_transliteration_count = text_transliterations::Entity::find()
         .filter(text_transliterations::Column::IdUser.eq(auth.id))
         .count(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     // data statistik image transliteration
-    let image_transliteration_count = ImageTransliterations::find()
+    let image_transliteration_count = image_transliterations::Entity::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .count(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     // Riwayat image transliteration
-    let image_transliterations = ImageTransliterations::find()
+    let image_transliterations = image_transliterations::Entity::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .order_by_desc(image_transliterations::Column::CreatedAt)
         .limit(5)
@@ -133,7 +133,7 @@ pub async fn update_profile(
 ) -> Result<Status, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_model = Users::find_by_id(auth.id)
+    let user_model = users::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?

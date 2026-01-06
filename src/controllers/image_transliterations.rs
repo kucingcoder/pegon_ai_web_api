@@ -13,7 +13,7 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
-use crate::models::{image_transliterations, prelude::*, users};
+use crate::models::{image_transliterations, users};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -33,7 +33,7 @@ pub async fn transliterate(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_category: Category = Users::find_by_id(auth.id)
+    let user_category: Category = users::Entity::find_by_id(auth.id)
         .select_only()
         .column(users::Column::Category)
         .into_tuple()
@@ -49,7 +49,7 @@ pub async fn transliterate(
             .and_hms_opt(0, 0, 0)
             .unwrap();
 
-        let count = ImageTransliterations::find()
+        let count = image_transliterations::Entity::find()
             .filter(image_transliterations::Column::IdUser.eq(auth.id))
             .filter(image_transliterations::Column::CreatedAt.gt(today_start))
             .count(db)
@@ -121,7 +121,7 @@ pub async fn history(
     let page = page.unwrap_or(1);
     let limit = limit.unwrap_or(10);
 
-    let paginator = ImageTransliterations::find()
+    let paginator = image_transliterations::Entity::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .order_by_desc(image_transliterations::Column::CreatedAt)
         .select_only()
@@ -177,7 +177,7 @@ pub async fn read(
     let parsed_id = Uuid::parse_str(&id)
         .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
 
-    let image_transliteration = ImageTransliterations::find()
+    let image_transliteration = image_transliterations::Entity::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .filter(image_transliterations::Column::Id.eq(parsed_id))
         .one(db)
@@ -210,7 +210,7 @@ pub async fn update_title(
     let parsed_id = Uuid::parse_str(&data.id)
         .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
 
-    let image_transliteration = ImageTransliterations::find()
+    let image_transliteration = image_transliterations::Entity::find()
         .filter(image_transliterations::Column::IdUser.eq(auth.id))
         .filter(image_transliterations::Column::Id.eq(parsed_id))
         .one(db)

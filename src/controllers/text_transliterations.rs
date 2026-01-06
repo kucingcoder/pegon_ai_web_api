@@ -1,11 +1,11 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
-use crate::models::{prelude::*, text_transliterations, users};
+use crate::models::{text_transliterations, users};
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, post};
+use sea_orm::QuerySelect;
 use sea_orm::*;
-use sea_orm::{EntityTrait, QuerySelect};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -22,7 +22,7 @@ pub async fn transliterate(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_category: Category = Users::find_by_id(auth.id)
+    let user_category: Category = users::Entity::find_by_id(auth.id)
         .select_only()
         .column(users::Column::Category)
         .into_tuple()
@@ -38,7 +38,7 @@ pub async fn transliterate(
             .and_hms_opt(0, 0, 0)
             .unwrap();
 
-        let count = TextTransliterations::find()
+        let count = text_transliterations::Entity::find()
             .filter(text_transliterations::Column::IdUser.eq(auth.id))
             .filter(text_transliterations::Column::CreatedAt.gt(today_start))
             .count(db)
