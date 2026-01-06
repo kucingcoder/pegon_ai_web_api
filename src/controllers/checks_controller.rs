@@ -9,13 +9,13 @@ use sea_orm::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct CheckTextRequest {
+pub struct CheckReadRequest {
     pub guess: String,
     pub real: String,
 }
 
 #[derive(Debug, Serialize)]
-pub struct CheckTextResponse {
+pub struct CheckReadResponse {
     pub success: bool,
     pub message: String,
     pub current_level: i32,
@@ -26,8 +26,8 @@ pub struct CheckTextResponse {
 pub async fn check_read(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
-    data: Json<CheckTextRequest>,
-) -> Result<Json<CheckTextResponse>, (Status, String)> {
+    data: Json<CheckReadRequest>,
+) -> Result<Json<CheckReadResponse>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
     // VALIDASI: Trim whitespace & Case Insensitive
@@ -84,7 +84,7 @@ pub async fn check_read(
         .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
 
     // STEP 5: Return JSON Response
-    Ok(Json(CheckTextResponse {
+    Ok(Json(CheckReadResponse {
         success: true,
         message: "Jawaban benar! Progress disimpan.".to_string(),
         current_level: next_level,
