@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 
 use crate::models::sea_orm_active_enums::{Category, Gender};
-use crate::models::users;
+use crate::models::user_model;
 
 // Request dari frontend
 // Saat user login pake Google, frontend ngirim token ini ke backend kita.
@@ -56,8 +56,8 @@ pub async fn login(
         return Err(Status::Forbidden);
     }
 
-    let user_opt = users::Entity::find()
-        .filter(users::Column::Email.eq(&payload.email))
+    let user_opt = user_model::Entity::find()
+        .filter(user_model::Column::Email.eq(&payload.email))
         .one(db)
         .await
         .map_err(|_| Status::InternalServerError)?;
@@ -65,7 +65,7 @@ pub async fn login(
     let user = match user_opt {
         Some(existing_user) => existing_user,
         None => {
-            let new_user = users::ActiveModel {
+            let new_user = user_model::ActiveModel {
                 email: Set(payload.email),
                 full_name: Set(payload.name),
                 photo_profile: Set(payload.picture),

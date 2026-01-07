@@ -28,27 +28,27 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::image_transliterations::Entity")]
+    #[sea_orm(has_many = "super::image_transliteration_model::Entity")]
     ImageTransliterations,
-    #[sea_orm(has_many = "super::text_transliterations::Entity")]
+    #[sea_orm(has_many = "super::text_transliteration_model::Entity")]
     TextTransliterations,
-    #[sea_orm(has_many = "super::transactions::Entity")]
+    #[sea_orm(has_many = "super::transaction_model::Entity")]
     Transactions,
 }
 
-impl Related<super::image_transliterations::Entity> for Entity {
+impl Related<super::image_transliteration_model::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::ImageTransliterations.def()
     }
 }
 
-impl Related<super::text_transliterations::Entity> for Entity {
+impl Related<super::text_transliteration_model::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::TextTransliterations.def()
     }
 }
 
-impl Related<super::transactions::Entity> for Entity {
+impl Related<super::transaction_model::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Transactions.def()
     }

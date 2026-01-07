@@ -1,6 +1,6 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
-use crate::models::{text_transliterations, users};
+use crate::models::{text_transliteration_model, user_model};
 use rocket::http::Status;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, post};
@@ -22,9 +22,9 @@ pub async fn transliterate(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_category: Category = users::Entity::find_by_id(auth.id)
+    let user_category: Category = user_model::Entity::find_by_id(auth.id)
         .select_only()
-        .column(users::Column::Category)
+        .column(user_model::Column::Category)
         .into_tuple()
         .one(db)
         .await
@@ -38,9 +38,9 @@ pub async fn transliterate(
             .and_hms_opt(0, 0, 0)
             .unwrap();
 
-        let count = text_transliterations::Entity::find()
-            .filter(text_transliterations::Column::IdUser.eq(auth.id))
-            .filter(text_transliterations::Column::CreatedAt.gt(today_start))
+        let count = text_transliteration_model::Entity::find()
+            .filter(text_transliteration_model::Column::IdUser.eq(auth.id))
+            .filter(text_transliteration_model::Column::CreatedAt.gt(today_start))
             .count(db)
             .await
             .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
@@ -62,7 +62,7 @@ pub async fn transliterate(
     let generated_result = "hello world".to_string();
 
     // simpan hasil transliteration
-    text_transliterations::ActiveModel {
+    text_transliteration_model::ActiveModel {
         id_user: Set(auth.id),
         instruction: Set(instrution.clone()),
         input: Set(data.text.clone()),

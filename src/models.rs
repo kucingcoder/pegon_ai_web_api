@@ -1,6 +1,6 @@
-pub mod image_transliterations;
-pub mod learn;
+pub mod image_transliteration_model;
+pub mod learn_model;
 pub mod sea_orm_active_enums;
-pub mod text_transliterations;
-pub mod transactions;
-pub mod users;
+pub mod text_transliteration_model;
+pub mod transaction_model;
+pub mod user_model;

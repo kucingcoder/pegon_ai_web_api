@@ -39,13 +39,13 @@ async fn rocket() -> _ {
                 controllers::user_controller::get_profile,
                 controllers::user_controller::get_profile_detail,
                 controllers::user_controller::update_profile,
-                controllers::text_transliterations::transliterate,
-                controllers::image_transliterations::transliterate,
-                controllers::image_transliterations::history,
-                controllers::image_transliterations::read,
-                controllers::image_transliterations::update_title,
-                controllers::checks_controller::check_read,
-                controllers::checks_controller::check_write
+                controllers::text_transliteration_controller::transliterate,
+                controllers::image_transliteration_controller::transliterate,
+                controllers::image_transliteration_controller::history,
+                controllers::image_transliteration_controller::read,
+                controllers::image_transliteration_controller::update_title,
+                controllers::check_controller::check_read,
+                controllers::check_controller::check_write
             ],
         )
 }

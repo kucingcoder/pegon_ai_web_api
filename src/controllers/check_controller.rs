@@ -1,5 +1,5 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
-use crate::models::{learn, users};
+use crate::models::{learn_model, user_model};
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::Status;
@@ -47,10 +47,10 @@ pub async fn check_read(
     }
 
     // STEP 1: Ambil Level & Stage User Saat Ini
-    let (current_level, current_stage) = users::Entity::find_by_id(auth.id)
+    let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
         .select_only()
-        .column(users::Column::LearningLevel)
-        .column(users::Column::LearningStageLevel)
+        .column(user_model::Column::LearningLevel)
+        .column(user_model::Column::LearningStageLevel)
         .into_tuple::<(i32, i32)>()
         .one(db)
         .await
@@ -58,10 +58,10 @@ pub async fn check_read(
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
     // STEP 2: Ambil Max Stage dari Config (Tabel Learn)
-    let max_stage = learn::Entity::find()
-        .filter(learn::Column::Level.eq(current_level))
+    let max_stage = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(current_level))
         .select_only()
-        .column(learn::Column::MaxStage)
+        .column(learn_model::Column::MaxStage)
         .into_tuple::<i32>()
         .one(db)
         .await
@@ -79,7 +79,7 @@ pub async fn check_read(
     };
 
     // STEP 4: Update Level/Stage User
-    let user_update = users::ActiveModel {
+    let user_update = user_model::ActiveModel {
         id: Set(auth.id),
         learning_level: Set(next_level),
         learning_stage_level: Set(next_stage_level),
@@ -121,10 +121,10 @@ pub async fn check_write(
     }
 
     // STEP 1: Ambil Level & Stage User Saat Ini
-    let (current_level, current_stage) = users::Entity::find_by_id(auth.id)
+    let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
         .select_only()
-        .column(users::Column::LearningLevel)
-        .column(users::Column::LearningStageLevel)
+        .column(user_model::Column::LearningLevel)
+        .column(user_model::Column::LearningStageLevel)
         .into_tuple::<(i32, i32)>()
         .one(db)
         .await
@@ -132,10 +132,10 @@ pub async fn check_write(
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
     // STEP 2: Ambil Max Stage dari Config (Tabel Learn)
-    let max_stage = learn::Entity::find()
-        .filter(learn::Column::Level.eq(current_level))
+    let max_stage = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(current_level))
         .select_only()
-        .column(learn::Column::MaxStage)
+        .column(learn_model::Column::MaxStage)
         .into_tuple::<i32>()
         .one(db)
         .await
@@ -153,7 +153,7 @@ pub async fn check_write(
     };
 
     // STEP 4: Update Level/Stage User
-    let user_update = users::ActiveModel {
+    let user_update = user_model::ActiveModel {
         id: Set(auth.id),
         learning_level: Set(next_level),
         learning_stage_level: Set(next_stage_level),

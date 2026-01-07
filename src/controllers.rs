@@ -1,6 +1,6 @@
 pub mod auth_controller;
-pub mod checks_controller;
+pub mod check_controller;
 pub mod home_controller;
-pub mod image_transliterations;
-pub mod text_transliterations;
+pub mod image_transliteration_controller;
+pub mod text_transliteration_controller;
 pub mod user_controller;

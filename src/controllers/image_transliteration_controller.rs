@@ -13,7 +13,7 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
-use crate::models::{image_transliterations, users};
+use crate::models::{image_transliteration_model, user_model};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -33,9 +33,9 @@ pub async fn transliterate(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_category: Category = users::Entity::find_by_id(auth.id)
+    let user_category: Category = user_model::Entity::find_by_id(auth.id)
         .select_only()
-        .column(users::Column::Category)
+        .column(user_model::Column::Category)
         .into_tuple()
         .one(db)
         .await
@@ -49,9 +49,9 @@ pub async fn transliterate(
             .and_hms_opt(0, 0, 0)
             .unwrap();
 
-        let count = image_transliterations::Entity::find()
-            .filter(image_transliterations::Column::IdUser.eq(auth.id))
-            .filter(image_transliterations::Column::CreatedAt.gt(today_start))
+        let count = image_transliteration_model::Entity::find()
+            .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+            .filter(image_transliteration_model::Column::CreatedAt.gt(today_start))
             .count(db)
             .await
             .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
@@ -93,7 +93,7 @@ pub async fn transliterate(
     let url = make_full_url(&format!("transliterations/{}", filename));
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
-    let new_image_transliteration = image_transliterations::ActiveModel {
+    let new_image_transliteration = image_transliteration_model::ActiveModel {
         id_user: Set(auth.id),
         image: Set(url),
         title: Set(title),
@@ -121,18 +121,18 @@ pub async fn history(
     let page = page.unwrap_or(1);
     let limit = limit.unwrap_or(10);
 
-    let paginator = image_transliterations::Entity::find()
-        .filter(image_transliterations::Column::IdUser.eq(auth.id))
-        .order_by_desc(image_transliterations::Column::CreatedAt)
+    let paginator = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+        .order_by_desc(image_transliteration_model::Column::CreatedAt)
         .select_only()
-        .column(image_transliterations::Column::Id)
-        .column(image_transliterations::Column::Title)
-        .column(image_transliterations::Column::Image)
-        .column(image_transliterations::Column::CreatedAt)
+        .column(image_transliteration_model::Column::Id)
+        .column(image_transliteration_model::Column::Title)
+        .column(image_transliteration_model::Column::Image)
+        .column(image_transliteration_model::Column::CreatedAt)
         .column_as(
             Expr::expr(
                 Func::cust("SUBSTRING")
-                    .arg(Expr::col(image_transliterations::Column::Result))
+                    .arg(Expr::col(image_transliteration_model::Column::Result))
                     .arg(1)
                     .arg(100),
             ),
@@ -177,9 +177,9 @@ pub async fn read(
     let parsed_id = Uuid::parse_str(&id)
         .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
 
-    let image_transliteration = image_transliterations::Entity::find()
-        .filter(image_transliterations::Column::IdUser.eq(auth.id))
-        .filter(image_transliterations::Column::Id.eq(parsed_id))
+    let image_transliteration = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+        .filter(image_transliteration_model::Column::Id.eq(parsed_id))
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
@@ -210,15 +210,15 @@ pub async fn update_title(
     let parsed_id = Uuid::parse_str(&data.id)
         .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
 
-    let image_transliteration = image_transliterations::Entity::find()
-        .filter(image_transliterations::Column::IdUser.eq(auth.id))
-        .filter(image_transliterations::Column::Id.eq(parsed_id))
+    let image_transliteration = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+        .filter(image_transliteration_model::Column::Id.eq(parsed_id))
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
         .ok_or((Status::NotFound, "Data not found".to_string()))?;
 
-    let mut image_transliteration: image_transliterations::ActiveModel =
+    let mut image_transliteration: image_transliteration_model::ActiveModel =
         image_transliteration.into();
     image_transliteration.title = Set(data.title.clone());
 

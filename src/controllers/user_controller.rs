@@ -12,7 +12,7 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Gender;
-use crate::models::{image_transliterations, text_transliterations, users};
+use crate::models::{image_transliteration_model, text_transliteration_model, user_model};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -26,7 +26,7 @@ pub async fn get_profile(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user = users::Entity::find_by_id(auth.id)
+    let user = user_model::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
@@ -55,40 +55,40 @@ pub async fn get_profile_detail(
     let db = db as &DatabaseConnection;
 
     // data diri user
-    let user_model = users::Entity::find_by_id(auth.id)
+    let user_model = user_model::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
     // data statistik text transliteration
-    let text_transliteration_count = text_transliterations::Entity::find()
-        .filter(text_transliterations::Column::IdUser.eq(auth.id))
+    let text_transliteration_count = text_transliteration_model::Entity::find()
+        .filter(text_transliteration_model::Column::IdUser.eq(auth.id))
         .count(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     // data statistik image transliteration
-    let image_transliteration_count = image_transliterations::Entity::find()
-        .filter(image_transliterations::Column::IdUser.eq(auth.id))
+    let image_transliteration_count = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
         .count(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     // Riwayat image transliteration
-    let image_transliterations = image_transliterations::Entity::find()
-        .filter(image_transliterations::Column::IdUser.eq(auth.id))
-        .order_by_desc(image_transliterations::Column::CreatedAt)
+    let image_transliterations = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+        .order_by_desc(image_transliteration_model::Column::CreatedAt)
         .limit(5)
         .select_only()
-        .column(image_transliterations::Column::Id)
-        .column(image_transliterations::Column::Title)
-        .column(image_transliterations::Column::Image)
-        .column(image_transliterations::Column::CreatedAt)
+        .column(image_transliteration_model::Column::Id)
+        .column(image_transliteration_model::Column::Title)
+        .column(image_transliteration_model::Column::Image)
+        .column(image_transliteration_model::Column::CreatedAt)
         .column_as(
             Expr::expr(
                 Func::cust("SUBSTRING")
-                    .arg(Expr::col(image_transliterations::Column::Result))
+                    .arg(Expr::col(image_transliteration_model::Column::Result))
                     .arg(1)
                     .arg(100),
             ),
@@ -133,13 +133,13 @@ pub async fn update_profile(
 ) -> Result<Status, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let user_model = users::Entity::find_by_id(auth.id)
+    let user_model = user_model::Entity::find_by_id(auth.id)
         .one(db)
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
-    let mut user: users::ActiveModel = user_model.into();
+    let mut user: user_model::ActiveModel = user_model.into();
     user.full_name = Set(form.full_name.clone());
     let gender_enum = match form.gender.as_str() {
         "Male" | "male" => Gender::Male,
