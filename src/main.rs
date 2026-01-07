@@ -34,6 +34,7 @@ async fn rocket() -> _ {
         .mount(
             "/api",
             routes![
+                controllers::check_controller::check_ping,
                 controllers::auth_controller::login,
                 controllers::auth_controller::logout,
                 controllers::user_controller::get_profile,

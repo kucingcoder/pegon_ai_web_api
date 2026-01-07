@@ -30,6 +30,11 @@ pub struct CheckResponse {
     pub current_stage_level: i32,
 }
 
+#[get("/check/ping")]
+pub async fn check_ping() -> Result<Status, (Status, String)> {
+    Ok(Status::Ok)
+}
+
 #[post("/check/read", data = "<data>")]
 pub async fn check_read(
     db: &State<DatabaseConnection>,
