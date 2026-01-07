@@ -1,0 +1,13 @@
+[default]
+ident = "Pegon AI"
+address = "0.0.0.0"
+port = 8000
+temp_dir = "images/temp"
+keep_alive = 120
+
+[default.limits]
+file = "30 MiB"
+data-form = "33 MiB"
+
+[release]
+log_level = "critical"

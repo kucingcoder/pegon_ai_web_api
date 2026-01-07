@@ -21,6 +21,7 @@ async fn rocket() -> _ {
     std::fs::create_dir_all("images").expect("Gagal buat folder images");
     std::fs::create_dir_all("images/photo_profiles").expect("Gagal buat folder photo_profiles");
     std::fs::create_dir_all("images/transliterations").expect("Gagal buat folder transliterations");
+    std::fs::create_dir_all("images/temp").expect("Gagal buat folder temp");
 
     // build rocket
     rocket::build()
