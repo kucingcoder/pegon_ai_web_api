@@ -87,6 +87,7 @@ pub async fn login(
     let mut cookie = Cookie::new("user_id", user.id.to_string());
     cookie.set_secure(false);
     cookie.set_http_only(true);
+    cookie.make_permanent();
     cookie.set_same_site(SameSite::Lax);
     cookie.set_path("/");
     cookies.add_private(cookie);
