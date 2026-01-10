@@ -2,8 +2,10 @@ use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
 use crate::models::{text_transliteration_model, user_model};
 use rocket::http::Status;
+use rocket::response::Redirect;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
 use rocket::{State, post};
+use rocket_dyn_templates::{Template, context};
 use sea_orm::QuerySelect;
 use sea_orm::*;
 use serde::{Deserialize, Serialize};
@@ -72,6 +74,81 @@ pub async fn transliterate(
     .insert(db)
     .await
     .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    Ok(Json(json!({
+        "result": generated_result
+    })))
+}
+
+#[get("/transliteration/add-in-transliterate-view")]
+pub async fn add_in_transliterate_view(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+) -> Result<Template, Redirect> {
+    let db = db as &DatabaseConnection;
+
+    let user_category: Category = user_model::Entity::find_by_id(auth.id)
+        .select_only()
+        .column(user_model::Column::Category)
+        .into_tuple()
+        .one(db)
+        .await
+        .map_err(|_| Redirect::to("/add-in/login/add-in-auth-view"))?
+        .ok_or(Redirect::to("/add-in/login/add-in-auth-view"))?;
+
+    if user_category != Category::Premium {
+        return Err(Redirect::to("/add-in/login/add-in-auth-view"));
+    }
+
+    Ok(Template::render("addin-transliterate", context! {}))
+}
+
+#[post("/transliteration/add-in-transliterate-handle", data = "<data>")]
+pub async fn add_in_transliterate_handle(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+    data: Json<TextTransliterationRequest>,
+) -> Result<Json<Value>, Redirect> {
+    let db = db as &DatabaseConnection;
+
+    let user_category: Category = user_model::Entity::find_by_id(auth.id)
+        .select_only()
+        .column(user_model::Column::Category)
+        .into_tuple()
+        .one(db)
+        .await
+        .map_err(|_| Redirect::to("/add-in/login/add-in-auth-view"))?
+        .ok_or(Redirect::to("/add-in/login/add-in-auth-view"))?;
+
+    if user_category != Category::Premium {
+        return Err(Redirect::to("/add-in/login/add-in-auth-view"));
+    }
+
+    // transliterate text
+    let instrution = if data.harakat {
+        "dengan harakat".to_string()
+    } else {
+        "tanpa harakat".to_string()
+    };
+    let generated_result = "hello world".to_string();
+
+    // simpan hasil transliteration
+    let save_result = text_transliteration_model::ActiveModel {
+        id_user: Set(auth.id),
+        instruction: Set(instrution.clone()),
+        input: Set(data.text.clone()),
+        result: Set(generated_result.clone()),
+        ..Default::default()
+    }
+    .insert(db)
+    .await;
+
+    if let Err(e) = save_result {
+        return Ok(Json(json!({
+            "status": "error",
+            "message": "Gagal menyimpan data transliterasi"
+        })));
+    }
 
     Ok(Json(json!({
         "result": generated_result

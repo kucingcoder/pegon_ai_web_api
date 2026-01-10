@@ -2,8 +2,9 @@
 ident = "Pegon AI"
 address = "0.0.0.0"
 port = 8000
-temp_dir = "images/temp"
 keep_alive = 120
+template_dir = "views"
+temp_dir = "images/temp"
 
 [default.limits]
 file = "30 MiB"

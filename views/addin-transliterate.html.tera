@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegon AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#06b6d4',
+                        secondary: '#ecfeff',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #e5e7eb;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans">
+
+    <main class="w-full h-screen p-4 space-y-4">
+        <div
+            class="bg-secondary border border-2 border-cyan-300 rounded-2xl p-5 flex justify-between items-center shadow shadow-lg">
+            <div>
+                <h3 class="text-gray-900 font-medium text-lg">Gunakan Harakat</h3>
+                <p class="text-gray-500 text-sm">Tambahkan tanda baca Arab</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="harakatSwitch" name="use_harakat" class="sr-only peer">
+                <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                </div>
+            </label>
+        </div>
+        
+        <div class="mt-4 bg-white rounded-3xl shadow shadow-lg border border-2 border-gray-300 p-5 relative">
+        
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                    <h3 class="text-gray-900 font-semibold text-lg">Teks Asli</h3>
+                </div>
+                <button type="button" onclick="document.getElementById('inputText').value = ''; updateCounter();"
+                    class="text-gray-500 hover:text-gray-600 transition bg-gray-200 rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        
+            <textarea id="inputText" name="text" rows="8" placeholder="Ketik teks di sini..."
+                class="w-full resize-none text-gray-600 placeholder-gray-400 outline-none text-lg bg-transparent"
+                oninput="updateCounter()"></textarea>
+        
+            <div class="mt-4 text-gray-600 text-sm">
+                <span id="charCount">0</span> karakter
+            </div>
+        </div>
+        
+        <button type="button"
+            class="mt-6 w-full bg-primary hover:bg-cyan-600 text-white font-bold py-4 rounded-2xl shadow shadow-lg shadow-cyan-200 transition transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            </svg>
+            Transliterasi
+        </button>
+    </main>
+
+    <script>
+        // Fungsi counter karakter (bawaan lama)
+        function updateCounter() {
+            const input = document.getElementById('inputText');
+            const counter = document.getElementById('charCount');
+            counter.innerText = input.value.length;
+        }
+
+        // Local Storage untuk Switch Harakat
+        document.addEventListener('DOMContentLoaded', () => {
+            const harakatSwitch = document.getElementById('harakatSwitch');
+            const STORAGE_KEY = 'pegon_harakat_pref';
+
+            // 1. Cek apakah ada data tersimpan di Local Storage
+            const savedState = localStorage.getItem(STORAGE_KEY);
+
+            // 2. Jika ada, set status checkbox sesuai data
+            // Jika tidak ada (null), biarkan default HTML (checked="checked")
+            if (savedState !== null) {
+                harakatSwitch.checked = (savedState === 'true');
+            }
+
+            // 3. Simpan ke Local Storage setiap kali user mengubah switch
+            harakatSwitch.addEventListener('change', () => {
+                localStorage.setItem(STORAGE_KEY, harakatSwitch.checked);
+            });
+        });
+    </script>
+</body>
+
+</html>

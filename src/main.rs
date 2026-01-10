@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate rocket;
 use rocket::fs::{FileServer, relative};
+use rocket_dyn_templates::Template;
 use sea_orm::Database;
 mod controllers;
 mod middlewares;
@@ -25,12 +26,30 @@ async fn rocket() -> _ {
 
     // build rocket
     rocket::build()
+        // database
         .manage(db)
-        // landing page
-        .mount("/", routes![controllers::home_controller::index])
-        // file servers
+        // templates
+        .attach(Template::fairing())
+        // redirect login
+        .register(
+            "/add-in",
+            catchers![crate::middlewares::catchers::add_in_unauthorized_redirect],
+        )
+        // file
         .mount("/static", FileServer::from(relative!("static")))
         .mount("/images", FileServer::from(relative!("images")))
+        // landing page
+        .mount("/", routes![controllers::home_controller::index])
+        // add-in routes
+        .mount(
+            "/add-in",
+            routes![
+                controllers::auth_controller::login_add_in_auth_view,
+                controllers::auth_controller::login_add_in_auth_handle,
+                controllers::text_transliteration_controller::add_in_transliterate_view,
+                controllers::text_transliteration_controller::add_in_transliterate_handle
+            ],
+        )
         // api routes
         .mount(
             "/api",
