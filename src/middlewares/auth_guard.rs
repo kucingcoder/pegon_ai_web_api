@@ -13,7 +13,7 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
     async fn from_request(req: &'r Request<'_>) -> Outcome<Self, Self::Error> {
         let cookies = req.cookies();
 
-        if let Some(cookie) = cookies.get_private("user_id") {
+        if let Some(cookie) = cookies.get_private("session") {
             if let Ok(uuid) = Uuid::parse_str(cookie.value()) {
                 return Outcome::Success(AuthenticatedUser { id: uuid });
             }

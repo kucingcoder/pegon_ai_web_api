@@ -84,7 +84,7 @@ pub async fn login(
         }
     };
 
-    let mut cookie = Cookie::new("user_id", user.id.to_string());
+    let mut cookie = Cookie::new("session", user.id.to_string());
     cookie.set_secure(false);
     cookie.set_http_only(true);
     cookie.make_permanent();
@@ -202,7 +202,7 @@ pub async fn login_add_in_auth_handle(
         }
     };
 
-    let mut cookie = Cookie::new("user_id", user.id.to_string());
+    let mut cookie = Cookie::new("session", user.id.to_string());
     cookie.set_secure(false);
     cookie.set_http_only(true);
     cookie.set_same_site(SameSite::Lax);
@@ -221,6 +221,6 @@ pub async fn login_add_in_auth_handle(
 
 #[get("/logout")]
 pub async fn logout(cookies: &CookieJar<'_>) -> Status {
-    cookies.remove_private(Cookie::from("user_id"));
+    cookies.remove_private(Cookie::from("session"));
     Status::NoContent
 }

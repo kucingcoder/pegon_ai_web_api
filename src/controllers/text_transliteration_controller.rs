@@ -143,7 +143,7 @@ pub async fn add_in_transliterate_handle(
     .insert(db)
     .await;
 
-    if let Err(e) = save_result {
+    if let Err(_e) = save_result {
         return Ok(Json(json!({
             "status": "error",
             "message": "Gagal menyimpan data transliterasi"
