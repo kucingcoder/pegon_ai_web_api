@@ -1,146 +1,56 @@
 <!DOCTYPE html>
+
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - Pegon AI</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#06b6d4', // Cyan-500
-                        secondary: '#ecfeff', // Cyan-50
-                    }
-                }
-            }
-        }
-    </script>
+    <script> tailwind.config = { theme: { extend: { colors: { primary: '#06b6d4', secondary: '#ecfeff', }, animation: { 'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both', }, keyframes: { shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } } } } } } </script>
 </head>
 
-<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans selection:bg-cyan-100">
-
-    <main class="w-full max-w-sm p-6">
-
-        <div
-            class="bg-white rounded-[2rem] shadow shadow-xl border border-2 border-slate-300 p-8 text-center relative overflow-hidden">
-
-            <div
-                class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-100 rounded-full blur-3xl opacity-50 pointer-events-none">
-            </div>
-            <div
-                class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none">
-            </div>
-
-            <div
-                class="relative z-10 mb-6 inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-50 to-white shadow shadow-lg border border-2 border-cyan-300 text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                    stroke="currentColor" class="w-10 h-10">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                </svg>
-            </div>
-
-            <div class="relative z-10">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">Pegon AI Add In</h1>
-                <p class="text-gray-500 text-sm mb-8 leading-relaxed">
-                    Masuk dengan akun Google yang terdaftar sebagai <b>Premium</b> di aplikasi mobile.
-                </p>
-            </div>
-
-            <div class="relative z-10 flex flex-col items-center justify-center gap-4 min-h-[50px]">
-
-                <div id="g_id_onload" data-client_id="927004603318-jc9ooup1oi21f3019gn65m60nn1minfs.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup"
-                    data-callback="handleCredentialResponse" data-auto_prompt="false">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans">
+    <main class="w-full max-w-sm p-4 space-y-4">
+        <form action="/add-in/login/add-in-auth-handle" method="POST" class="w-full">
+            <div class="bg-white rounded-3xl shadow shadow-lg border border-2 border-gray-300 p-5 relative">
+                <div class="flex flex-col items-center justify-center mb-3">
+                    <div class="p-3 bg-white rounded-full border border-cyan-100 shadow-sm mb-3">
+                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-8 h-8 text-primary">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                        </svg>
+                    </div>
+                    <h3 class="text-gray-900 font-bold text-xl">Pegon AI</h3>
+                    <p class="text-gray-500 text-sm mt-1">Masuk dengan Kode Add-in</p>
                 </div>
 
-                <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"
-                    data-text="continue_with" data-size="large" data-logo_alignment="left">
-                </div>
-            </div>
-
-            <div id="statusMessage"
-                class="hidden relative z-10 mt-6 p-4 rounded-xl text-sm text-left transition-all duration-300">
-                <div class="flex gap-3">
-                    <div id="statusIcon" class="shrink-0 mt-0.5"></div>
-                    <div>
-                        <p id="statusTitle" class="font-semibold mb-1"></p>
-                        <p id="statusDesc" class="opacity-90 leading-snug"></p>
+                {% if error %}
+                <div class="mb-4 animate-shake">
+                    <div
+                        class="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-2xl text-red-600 text-sm">
+                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" viewBox="0 0 20 20"
+                            fill="currentColor" class="w-5 h-5 flex-shrink-0">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ error }}</span>
                     </div>
                 </div>
+                {% endif %}
+
+                <input type="text" name="add_in_code" id="add_in_code" placeholder="Masukkan kode di sini..."
+                    class="w-full text-gray-600 placeholder-gray-400 outline-none text-lg bg-gray-50 rounded-xl px-4 py-3 border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+
+                <button type="submit"
+                    class="mt-6 w-full bg-primary hover:bg-cyan-600 text-white font-bold py-2 rounded-2xl shadow shadow-lg shadow-cyan-200 transition transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+                    Masuk
+                </button>
             </div>
-
-        </div>
+        </form>
     </main>
-
-    <script>
-        async function handleCredentialResponse(response) {
-            const statusDiv = document.getElementById('statusMessage');
-            const statusTitle = document.getElementById('statusTitle');
-            const statusDesc = document.getElementById('statusDesc');
-            const statusIcon = document.getElementById('statusIcon');
-
-            showStatus('loading', 'Memverifikasi...', 'Mohon tunggu sebentar.');
-
-            try {
-                const res = await fetch('/add-in/login/add-in-auth-handle', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id_token: response.credential })
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    showStatus('success', 'Berhasil!', 'Mengalihkan ke add in...');
-                    setTimeout(() => {
-                        window.location.href = "/add-in/transliteration/add-in-transliterate-view";
-                    }, 1000);
-
-                } else {
-                    const msg = data.message || "Gagal memverifikasi akun.";
-                    showStatus('error', 'Akses Ditolak', msg);
-                }
-
-            } catch (error) {
-                console.error("Network Error:", error);
-                showStatus('error', 'Koneksi Gagal', 'Tidak dapat menghubungi server.');
-            }
-        }
-
-        function showStatus(type, title, desc) {
-            const el = document.getElementById('statusMessage');
-            const iconEl = document.getElementById('statusIcon');
-            const titleEl = document.getElementById('statusTitle');
-            const descEl = document.getElementById('statusDesc');
-
-            el.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-blue-50', 'text-blue-700', 'bg-green-50', 'text-green-700');
-            const errorIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
-            const loadingIcon = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>`;
-            const successIcon = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
-
-            if (type === 'error') {
-                el.classList.add('bg-red-50', 'text-red-700');
-                iconEl.innerHTML = errorIcon;
-            } else if (type === 'loading') {
-                el.classList.add('bg-blue-50', 'text-blue-700');
-                iconEl.innerHTML = loadingIcon;
-            } else if (type === 'success') {
-                el.classList.add('bg-green-50', 'text-green-700');
-                iconEl.innerHTML = successIcon;
-            }
-
-            titleEl.innerText = title;
-            descEl.innerText = desc;
-            el.classList.remove('hidden');
-        }
-    </script>
 </body>
 
 </html>

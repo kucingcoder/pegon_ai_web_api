@@ -46,6 +46,7 @@ async fn rocket() -> _ {
             routes![
                 controllers::auth_controller::login_add_in_auth_view,
                 controllers::auth_controller::login_add_in_auth_handle,
+                controllers::auth_controller::logout_add_in,
                 controllers::text_transliteration_controller::add_in_transliterate_view,
                 controllers::text_transliteration_controller::add_in_transliterate_handle
             ],
