@@ -1,6 +1,7 @@
 use super::sea_orm_active_enums::Category;
 use super::sea_orm_active_enums::Gender;
 use chrono::Utc;
+use nanoid::nanoid;
 use sea_orm::ActiveValue::Set;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -18,6 +19,7 @@ pub struct Model {
     pub full_name: String,
     pub gender: Gender,
     pub date_of_birth: Date,
+    pub add_in_code: String,
     pub category: Category,
     pub learning_level: i32,
     pub learning_stage_level: i32,
@@ -61,6 +63,12 @@ impl ActiveModelBehavior for ActiveModel {
         C: ConnectionTrait,
     {
         let now = Utc::now();
+        let alphabet: [char; 36] = [
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+            'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+            'Y', 'Z',
+        ];
+        let add_in_code = nanoid!(10, &alphabet);
 
         // Logika saat Insert (Data Baru)
         if insert {
@@ -69,7 +77,12 @@ impl ActiveModelBehavior for ActiveModel {
                 self.id = Set(Uuid::new_v4());
             }
 
-            // 2. Set created_at ke waktu sekarang
+            // 2. Set add_in_code otomatis jika belum di-set manual
+            if self.add_in_code.is_not_set() {
+                self.add_in_code = Set(add_in_code);
+            }
+
+            // 3. Set created_at ke waktu sekarang
             self.created_at = Set(Some(now));
         }
 

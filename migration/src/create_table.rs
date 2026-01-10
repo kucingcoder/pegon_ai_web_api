@@ -32,6 +32,12 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(Users::DateOfBirth).date().not_null())
                     .col(
+                        ColumnDef::new(Users::AddInCode)
+                            .string()
+                            .null()
+                            .unique_key(),
+                    )
+                    .col(
                         ColumnDef::new(Users::Category)
                             .enumeration(
                                 CategoryEnum::Table,
@@ -260,6 +266,7 @@ enum Users {
     FullName,
     Gender,
     DateOfBirth,
+    AddInCode,
     Category,
     LearningLevel,
     LearningStageLevel,
