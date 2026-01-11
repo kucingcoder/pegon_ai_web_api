@@ -66,6 +66,8 @@ async fn rocket() -> _ {
                 controllers::image_transliteration_controller::history,
                 controllers::image_transliteration_controller::read,
                 controllers::image_transliteration_controller::update_title,
+                controllers::check_controller::check_level_stage,
+                controllers::check_controller::check_update_level_stage,
                 controllers::check_controller::check_read,
                 controllers::check_controller::check_write,
                 controllers::transaction_controller::upgrade_to_premium,

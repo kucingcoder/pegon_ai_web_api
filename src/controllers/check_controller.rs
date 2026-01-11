@@ -6,7 +6,8 @@ use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::{State, post};
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QuerySelect, Set,
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
+    QuerySelect, Set,
 };
 use serde::{Deserialize, Serialize};
 
@@ -33,6 +34,113 @@ pub struct CheckResponse {
 #[get("/check/ping")]
 pub async fn check_ping() -> Result<Status, (Status, String)> {
     Ok(Status::Ok)
+}
+
+#[get("/check/level-stage")]
+pub async fn check_level_stage(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+) -> Result<Json<CheckResponse>, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
+        .select_only()
+        .column(user_model::Column::LearningLevel)
+        .column(user_model::Column::LearningStageLevel)
+        .into_tuple::<(i32, i32)>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
+        .ok_or((Status::NotFound, "User not found".to_string()))?;
+
+    Ok(Json(CheckResponse {
+        success: true,
+        message: "Success".to_string(),
+        current_level,
+        current_stage_level: current_stage,
+    }))
+}
+
+#[post("/check/update-level-stage")]
+pub async fn check_update_level_stage(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+) -> Result<Json<CheckResponse>, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    // STEP 1: Ambil Level & Stage User Saat Ini
+    let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
+        .select_only()
+        .column(user_model::Column::LearningLevel)
+        .column(user_model::Column::LearningStageLevel)
+        .into_tuple::<(i32, i32)>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
+        .ok_or((Status::NotFound, "User not found".to_string()))?;
+
+    // STEP 2: Ambil Max Stage untuk Level user saat ini
+    let max_stage_in_current_level = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(current_level))
+        .select_only()
+        .column(learn_model::Column::MaxStage)
+        .into_tuple::<i32>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+        .ok_or((
+            Status::NotFound,
+            format!("Konfigurasi untuk level {} tidak ditemukan", current_level),
+        ))?;
+
+    // Variabel mutables untuk next state
+    let mut next_level = current_level;
+    let mut next_stage_level = current_stage;
+    let mut is_updated = false;
+
+    if current_stage < max_stage_in_current_level {
+        next_stage_level = current_stage + 1;
+        is_updated = true;
+    } else {
+        let max_global_level = learn_model::Entity::find()
+            .select_only()
+            .column(learn_model::Column::Level)
+            .order_by_desc(learn_model::Column::Level)
+            .into_tuple::<i32>()
+            .one(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+            .unwrap_or(0);
+
+        if current_level < max_global_level {
+            next_level = current_level + 1;
+            next_stage_level = 1;
+            is_updated = true;
+        }
+    }
+
+    // STEP 3: Update Database (Hanya jika ada perubahan)
+    if is_updated {
+        let user_update = user_model::ActiveModel {
+            id: Set(auth.id),
+            learning_level: Set(next_level),
+            learning_stage_level: Set(next_stage_level),
+            ..Default::default()
+        };
+
+        user_update
+            .update(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
+    }
+
+    // STEP 4: Return Response
+    Ok(Json(CheckResponse {
+        success: true,
+        message: "".to_string(),
+        current_level: next_level,
+        current_stage_level: next_stage_level,
+    }))
 }
 
 #[post("/check/read", data = "<data>")]
@@ -62,8 +170,8 @@ pub async fn check_read(
         .map_err(|e| (Status::InternalServerError, e.to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
-    // STEP 2: Ambil Max Stage dari Config (Tabel Learn)
-    let max_stage = learn_model::Entity::find()
+    // STEP 2: Ambil Max Stage untuk Level user saat ini
+    let max_stage_in_current_level = learn_model::Entity::find()
         .filter(learn_model::Column::Level.eq(current_level))
         .select_only()
         .column(learn_model::Column::MaxStage)
@@ -73,33 +181,54 @@ pub async fn check_read(
         .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
         .ok_or((
             Status::NotFound,
-            "Konfigurasi level tidak ditemukan".to_string(),
+            format!("Konfigurasi untuk level {} tidak ditemukan", current_level),
         ))?;
 
-    // STEP 3: Hitung Level/Stage Berikutnya (Logic Split)
-    let (next_level, next_stage_level) = if current_stage >= max_stage {
-        (current_level + 1, 1)
+    // Variabel mutables untuk next state
+    let mut next_level = current_level;
+    let mut next_stage_level = current_stage;
+    let mut is_updated = false;
+
+    if current_stage < max_stage_in_current_level {
+        next_stage_level = current_stage + 1;
+        is_updated = true;
     } else {
-        (current_level, current_stage + 1)
-    };
+        let max_global_level = learn_model::Entity::find()
+            .select_only()
+            .column(learn_model::Column::Level)
+            .order_by_desc(learn_model::Column::Level)
+            .into_tuple::<i32>()
+            .one(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+            .unwrap_or(0);
 
-    // STEP 4: Update Level/Stage User
-    let user_update = user_model::ActiveModel {
-        id: Set(auth.id),
-        learning_level: Set(next_level),
-        learning_stage_level: Set(next_stage_level),
-        ..Default::default()
-    };
+        if current_level < max_global_level {
+            next_level = current_level + 1;
+            next_stage_level = 1;
+            is_updated = true;
+        }
+    }
 
-    user_update
-        .update(db)
-        .await
-        .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
+    // STEP 3: Update Database (Hanya jika ada perubahan)
+    if is_updated {
+        let user_update = user_model::ActiveModel {
+            id: Set(auth.id),
+            learning_level: Set(next_level),
+            learning_stage_level: Set(next_stage_level),
+            ..Default::default()
+        };
 
-    // STEP 5: Return JSON Response
+        user_update
+            .update(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
+    }
+
+    // STEP 4: Return Response
     Ok(Json(CheckResponse {
         success: true,
-        message: "Jawaban benar! Progress disimpan.".to_string(),
+        message: "Jawaban benar!".to_string(),
         current_level: next_level,
         current_stage_level: next_stage_level,
     }))
@@ -136,8 +265,8 @@ pub async fn check_write(
         .map_err(|e| (Status::InternalServerError, e.to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
-    // STEP 2: Ambil Max Stage dari Config (Tabel Learn)
-    let max_stage = learn_model::Entity::find()
+    // STEP 2: Ambil Max Stage untuk Level user saat ini
+    let max_stage_in_current_level = learn_model::Entity::find()
         .filter(learn_model::Column::Level.eq(current_level))
         .select_only()
         .column(learn_model::Column::MaxStage)
@@ -147,33 +276,54 @@ pub async fn check_write(
         .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
         .ok_or((
             Status::NotFound,
-            "Konfigurasi level tidak ditemukan".to_string(),
+            format!("Konfigurasi untuk level {} tidak ditemukan", current_level),
         ))?;
 
-    // STEP 3: Hitung Level/Stage Berikutnya (Logic Split)
-    let (next_level, next_stage_level) = if current_stage >= max_stage {
-        (current_level + 1, 1)
+    // Variabel mutables untuk next state
+    let mut next_level = current_level;
+    let mut next_stage_level = current_stage;
+    let mut is_updated = false;
+
+    if current_stage < max_stage_in_current_level {
+        next_stage_level = current_stage + 1;
+        is_updated = true;
     } else {
-        (current_level, current_stage + 1)
-    };
+        let max_global_level = learn_model::Entity::find()
+            .select_only()
+            .column(learn_model::Column::Level)
+            .order_by_desc(learn_model::Column::Level)
+            .into_tuple::<i32>()
+            .one(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+            .unwrap_or(0);
 
-    // STEP 4: Update Level/Stage User
-    let user_update = user_model::ActiveModel {
-        id: Set(auth.id),
-        learning_level: Set(next_level),
-        learning_stage_level: Set(next_stage_level),
-        ..Default::default()
-    };
+        if current_level < max_global_level {
+            next_level = current_level + 1;
+            next_stage_level = 1;
+            is_updated = true;
+        }
+    }
 
-    user_update
-        .update(db)
-        .await
-        .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
+    // STEP 3: Update Database (Hanya jika ada perubahan)
+    if is_updated {
+        let user_update = user_model::ActiveModel {
+            id: Set(auth.id),
+            learning_level: Set(next_level),
+            learning_stage_level: Set(next_stage_level),
+            ..Default::default()
+        };
 
-    // STEP 5: Return JSON Response
+        user_update
+            .update(db)
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("Update failed: {}", e)))?;
+    }
+
+    // STEP 4: Return Response
     Ok(Json(CheckResponse {
         success: true,
-        message: "Jawaban benar (Write)! Progress disimpan.".to_string(),
+        message: "Jawaban benar!".to_string(),
         current_level: next_level,
         current_stage_level: next_stage_level,
     }))

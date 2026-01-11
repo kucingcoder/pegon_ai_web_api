@@ -12,7 +12,9 @@ use uuid::Uuid;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Gender;
-use crate::models::{image_transliteration_model, text_transliteration_model, user_model};
+use crate::models::{
+    image_transliteration_model, learn_model, text_transliteration_model, user_model,
+};
 
 fn make_full_url(path: &str) -> String {
     let app_url = env::var("APP_URL").unwrap_or_else(|_| "http://localhost:8000".to_string());
@@ -38,11 +40,6 @@ pub async fn get_profile(
             "date_of_birth": user.date_of_birth,
             "add_in_code": user.add_in_code,
             "photo_profile": user.photo_profile,
-            "learning_level": user.learning_level,
-            "learning_stage_level": user.learning_stage_level,
-            "category": user.category,
-            "created_at": user.created_at,
-            "expired_at": user.expired_at
         }))),
         None => Err((Status::NotFound, "User not found".to_string())),
     }
@@ -61,6 +58,20 @@ pub async fn get_profile_detail(
         .await
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
+
+    // max stage level
+    let max_stage = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(user_model.learning_level))
+        .select_only()
+        .column(learn_model::Column::MaxStage)
+        .into_tuple::<i32>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+        .ok_or((
+            Status::NotFound,
+            "Konfigurasi level tidak ditemukan".to_string(),
+        ))?;
 
     // data statistik text transliteration
     let text_transliteration_count = text_transliteration_model::Entity::find()
@@ -105,10 +116,10 @@ pub async fn get_profile_detail(
             "full_name": user_model.full_name,
             "gender": user_model.gender,
             "date_of_birth": user_model.date_of_birth,
-            "add_in_code": user_model.add_in_code,
             "photo_profile": user_model.photo_profile,
             "learning_level": user_model.learning_level,
             "learning_stage_level": user_model.learning_stage_level,
+            "learning_stage_max": max_stage,
             "category": user_model.category,
             "created_at": user_model.created_at,
             "expired_at": user_model.expired_at
