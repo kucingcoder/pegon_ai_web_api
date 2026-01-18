@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate rocket;
-use rocket::fs::{FileServer, relative};
+use rocket::fs::FileServer;
 use rocket_dyn_templates::Template;
 use sea_orm::Database;
 mod controllers;
@@ -36,8 +36,8 @@ async fn rocket() -> _ {
             catchers![crate::middlewares::catchers::add_in_unauthorized_redirect],
         )
         // file
-        .mount("/static", FileServer::from(relative!("static")))
-        .mount("/images", FileServer::from(relative!("images")))
+        .mount("/static", FileServer::from("static"))
+        .mount("/images", FileServer::from("images"))
         // landing page
         .mount("/", routes![controllers::home_controller::index])
         // add-in routes
