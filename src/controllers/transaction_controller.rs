@@ -67,14 +67,14 @@ pub async fn upgrade_to_premium(
             },
             {
               "id": "2",
-              "price": 212,
+              "price": 250,
               "quantity": 1,
               "name": "biaya qris (0.7%)"
             }
           ],
           "transaction_details": {
             "order_id": id_trasaction.to_string(),
-            "gross_amount": 30212
+            "gross_amount": 30250
           },
           "custom_expiry": {
             "expiry_duration": 15,

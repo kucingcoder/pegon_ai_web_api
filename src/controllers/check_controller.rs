@@ -3,7 +3,7 @@ use crate::models::{learn_model, user_model};
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::Status;
-use rocket::serde::json::Json;
+use rocket::serde::json::{Json, Value, json};
 use rocket::{State, post};
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
@@ -31,16 +31,11 @@ pub struct CheckResponse {
     pub current_stage_level: i32,
 }
 
-#[get("/check/ping")]
-pub async fn check_ping() -> Result<Status, (Status, String)> {
-    Ok(Status::Ok)
-}
-
 #[get("/check/level-stage")]
 pub async fn check_level_stage(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
-) -> Result<Json<CheckResponse>, (Status, String)> {
+) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
     let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
@@ -53,12 +48,32 @@ pub async fn check_level_stage(
         .map_err(|e| (Status::InternalServerError, e.to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
-    Ok(Json(CheckResponse {
-        success: true,
-        message: "Success".to_string(),
-        current_level,
-        current_stage_level: current_stage,
-    }))
+    let max_stage_in_current_level = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(current_level))
+        .select_only()
+        .column(learn_model::Column::MaxStage)
+        .into_tuple::<i32>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
+        .ok_or((Status::NotFound, "Level not found".to_string()))?;
+
+    let max_level = learn_model::Entity::find()
+        .select_only()
+        .column(learn_model::Column::Level)
+        .order_by_desc(learn_model::Column::Level)
+        .into_tuple::<i32>()
+        .one(db)
+        .await
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
+        .ok_or((Status::NotFound, "Level not found".to_string()))?;
+
+    Ok(Json(json!({
+        "current_level": current_level,
+        "current_stage": current_stage,
+        "max_stage_in_current_level": max_stage_in_current_level,
+        "max_level": max_level
+    })))
 }
 
 #[post("/check/update-level-stage")]
