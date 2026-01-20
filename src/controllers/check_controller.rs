@@ -259,7 +259,7 @@ pub async fn check_write(
 
     // Unpack form data
     let data = form_data.into_inner();
-    let detected_text = "hello world";
+    let detected_text = "selamat pagi";
 
     // VALIDASI: Trim whitespace & Case Insensitive
     if detected_text.trim().to_lowercase() != data.real_text.trim().to_lowercase() {
