@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pegon AI</title>
+    
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,18 +22,25 @@
         }
     </script>
     <style>
-        /* Scrollbar styling agar rapi di taskpane kecil */
+        /* Scrollbar styling */
         textarea::-webkit-scrollbar {
             width: 6px;
         }
-
         textarea::-webkit-scrollbar-track {
             background: transparent;
         }
-
         textarea::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
             border-radius: 20px;
+        }
+        
+        /* Animasi Loading */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -60,13 +70,12 @@
         </div>
         
         <div class="bg-white rounded-3xl shadow-sm border border-2 border-gray-300 p-4 relative">
-        
             <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-primary"></span>
                     <h3 class="text-gray-900 font-semibold text-base">Teks Asli</h3>
                 </div>
-                <button type="button" onclick="document.getElementById('inputText').value = ''; updateCounter();"
+                <button type="button" onclick="clearText()"
                     class="text-gray-400 hover:text-gray-600 transition bg-gray-100 hover:bg-gray-200 rounded-full p-1 w-7 h-7 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="w-3.5 h-3.5">
@@ -84,28 +93,128 @@
             </div>
         </div>
         
-        <button type="button"
-            class="w-full bg-primary hover:bg-cyan-600 text-white font-bold py-2.5 rounded-2xl shadow-lg shadow-cyan-100 transition transform active:scale-95 flex justify-center items-center gap-2 text-base mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-            </svg>
-            Transliterasi
+        <button type="button" id="transliterateBtn" onclick="handleTransliteration()"
+            class="w-full bg-primary hover:bg-cyan-600 text-white font-bold py-2.5 rounded-2xl shadow-lg shadow-cyan-100 transition transform active:scale-95 flex justify-center items-center gap-2 text-base mt-2 disabled:bg-gray-400 disabled:shadow-none disabled:cursor-not-allowed">
+            
+            <span id="btnIcon" class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                </svg>
+                Transliterasi
+            </span>
+
+            <span id="btnLoading" class="hidden flex items-center gap-2">
+                <svg class="w-5 h-5 text-white spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Memproses...
+            </span>
         </button>
     </main>
 
     <script>
+        // Inisialisasi Office.js
+        Office.onReady((info) => {
+            if (info.host === Office.HostType.Word) {
+                console.log("Office.js is ready in Word");
+            }
+        });
+
+        // UI Helpers
         function updateCounter() {
             const input = document.getElementById('inputText');
             const counter = document.getElementById('charCount');
             counter.innerText = input.value.length;
         }
 
+        function clearText() {
+            document.getElementById('inputText').value = ''; 
+            updateCounter();
+        }
+
+        // --- Logic Utama Transliterasi ---
+        async function handleTransliteration() {
+            const inputText = document.getElementById('inputText').value;
+            const useHarakat = document.getElementById('harakatSwitch').checked;
+            const btn = document.getElementById('transliterateBtn');
+            const btnIcon = document.getElementById('btnIcon');
+            const btnLoading = document.getElementById('btnLoading');
+
+            // Validasi input kosong
+            if (!inputText.trim()) {
+                return; // Bisa ditambahkan alert "Teks kosong"
+            }
+
+            // 1. Set Loading State
+            btn.disabled = true;
+            btnIcon.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+
+            try {
+                // 2. Post ke API
+                const response = await fetch('/api/transliteration/text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: inputText,
+                        harakat: useHarakat
+                    })
+                });
+
+                // 3. Handle Response
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // 4. Sisipkan ke Word
+                    await insertIntoWord(data.result);
+                } else {
+                    // Handle Error dari Server
+                    const errorText = await response.text();
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        alert("Gagal: " + (errorJson.message || errorJson.error || errorText));
+                    } catch {
+                         alert("Gagal: " + errorText);
+                    }
+                }
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert("Terjadi kesalahan jaringan.");
+            } finally {
+                // 5. Kembalikan State Tombol
+                btn.disabled = false;
+                btnIcon.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        }
+
+        // Fungsi Office.js untuk insert teks
+        async function insertIntoWord(textToInsert) {
+            return Word.run(async (context) => {
+                // Mendapatkan seleksi saat ini (posisi kursor)
+                const selection = context.document.getSelection();
+                
+                // Menyisipkan teks (InsertLocation.replace akan menimpa jika ada teks yang diblok, atau insert di kursor)
+                selection.insertText(textToInsert, Word.InsertLocation.replace);
+                
+                // Sinkronisasi dengan dokumen
+                await context.sync();
+            }).catch(function (error) {
+                console.log("Error: " + error);
+                if (error instanceof OfficeExtension.Error) {
+                    console.log("Debug info: " + JSON.stringify(error.debugInfo));
+                }
+            });
+        }
+
+        // Load Preference Harakat
         document.addEventListener('DOMContentLoaded', () => {
             const harakatSwitch = document.getElementById('harakatSwitch');
             const STORAGE_KEY = 'pegon_harakat_pref';
-
             const savedState = localStorage.getItem(STORAGE_KEY);
 
             if (savedState !== null) {
