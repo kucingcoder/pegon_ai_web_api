@@ -147,7 +147,7 @@ pub async fn upgrade_to_premium(
         id_user: Set(auth.id),
         id_midtrans: Set(midtrans_uuid),
         title: Set("Pegon AI Premium 1 Bulan".to_string()),
-        value: Set(30212),
+        value: Set(30250),
         qr_code: Set(qr_code_url),
         status: Set(TransactionStatus::Pending),
         expired_at: Set(Some(expired_at_utc)),
