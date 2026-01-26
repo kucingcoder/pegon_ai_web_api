@@ -120,6 +120,17 @@ impl MigrationTrait for Migration {
             .await?;
 
         manager
+            .create_index(
+                Index::create()
+                    .name("idx-image-trans-user-created")
+                    .table(ImageTransliterations::Table)
+                    .col(ImageTransliterations::IdUser)
+                    .col(ImageTransliterations::CreatedAt)
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
             .create_table(
                 Table::create()
                     .table(TextTransliterations::Table)
@@ -163,6 +174,17 @@ impl MigrationTrait for Migration {
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_index(
+                Index::create()
+                    .name("idx-text-trans-user-created")
+                    .table(TextTransliterations::Table)
+                    .col(TextTransliterations::IdUser)
+                    .col(TextTransliterations::CreatedAt)
                     .to_owned(),
             )
             .await?;
@@ -217,6 +239,27 @@ impl MigrationTrait for Migration {
             .await?;
 
         manager
+            .create_index(
+                Index::create()
+                    .name("idx-transactions-user-created")
+                    .table(Transactions::Table)
+                    .col(Transactions::IdUser)
+                    .col(Transactions::CreatedAt)
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_index(
+                Index::create()
+                    .name("idx-transactions-midtrans")
+                    .table(Transactions::Table)
+                    .col(Transactions::IdMidtrans)
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
             .create_table(
                 Table::create()
                     .table(Learn::Table)
@@ -230,6 +273,16 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(Learn::Level).integer().not_null())
                     .col(ColumnDef::new(Learn::MaxStage).integer().not_null())
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_index(
+                Index::create()
+                    .name("idx-learn-level")
+                    .table(Learn::Table)
+                    .col(Learn::Level)
                     .to_owned(),
             )
             .await?;
