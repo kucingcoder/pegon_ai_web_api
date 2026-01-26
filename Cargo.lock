@@ -2001,6 +2001,7 @@ version = "1.0.0"
 dependencies = [
  "chrono",
  "dotenvy",
+ "hex",
  "nanoid",
  "reqwest",
  "rocket",
@@ -2009,6 +2010,7 @@ dependencies = [
  "sea-orm-migration",
  "serde",
  "serde_json",
+ "sha2",
  "uuid",
 ]
 

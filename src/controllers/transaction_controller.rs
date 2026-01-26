@@ -267,10 +267,16 @@ pub async fn status(
     Ok(Json(json!({"status": status})))
 }
 
+use sha2::{Sha512, Digest};
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NotificationRequest {
     pub transaction_id: String,
     pub transaction_status: String,
+    pub order_id: String,
+    pub status_code: String,
+    pub gross_amount: String,
+    pub signature_key: String,
 }
 
 #[post("/transaction/notification", data = "<data>")]
@@ -278,6 +284,23 @@ pub async fn notification(
     db: &State<DatabaseConnection>,
     data: Json<NotificationRequest>,
 ) -> Result<Json<Value>, Status> {
+    let midtrans_server_key = env::var("MIDTRANS_SERVER_KEY").expect("MIDTRANS_SERVER_KEY must be set");
+
+    let signature_payload = format!(
+        "{}{}{}{}",
+        data.order_id, data.status_code, data.gross_amount, midtrans_server_key
+    );
+
+    let mut hasher = Sha512::new();
+    hasher.update(signature_payload);
+    let result = hasher.finalize();
+    let calculated_signature = hex::encode(result);
+
+    if calculated_signature != data.signature_key {
+        println!("Invalid Signature: {}", calculated_signature); 
+        return Err(Status::Forbidden);
+    }
+
     let parsed_id = Uuid::parse_str(&data.transaction_id).map_err(|_| Status::BadRequest)?;
 
     let new_status = match data.transaction_status.as_str() {
