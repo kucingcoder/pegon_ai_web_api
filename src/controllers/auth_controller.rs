@@ -45,7 +45,10 @@ pub async fn login(
     data: Json<GoogleLoginRequest>,
 ) -> Result<Status, Status> {
     let db = db as &DatabaseConnection;
-    let client = Client::new();
+    let client = Client::builder()
+        .timeout(std::time::Duration::from_secs(15))
+        .build()
+        .map_err(|_| Status::InternalServerError)?;
     let google_validation_url = "https://oauth2.googleapis.com/tokeninfo";
     let resp = client
         .get(google_validation_url)
