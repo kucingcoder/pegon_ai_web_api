@@ -16,12 +16,22 @@ use serde::{Deserialize, Serialize};
 pub struct CheckReadRequest {
     pub guess: String,
     pub real: String,
+    pub current_level: i32,
+    pub current_stage: i32,
 }
 
 #[derive(FromForm)]
 pub struct CheckWriteRequest<'r> {
     pub image: TempFile<'r>,
     pub real_text: String,
+    pub current_level: i32,
+    pub current_stage: i32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CheckUpdateLevelStageRequest {
+    pub current_level: i32,
+    pub current_stage: i32,
 }
 
 #[derive(Debug, Serialize)]
@@ -77,10 +87,11 @@ pub async fn check_level_stage(
     })))
 }
 
-#[post("/check/update-level-stage")]
+#[post("/check/update-level-stage", data = "<data>")]
 pub async fn check_update_level_stage(
     db: &State<DatabaseConnection>,
     auth: AuthenticatedUser,
+    data: Json<CheckUpdateLevelStageRequest>,
 ) -> Result<Json<CheckResponse>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
@@ -114,24 +125,27 @@ pub async fn check_update_level_stage(
     let mut next_stage_level = current_stage;
     let mut is_updated = false;
 
-    if current_stage < max_stage_in_current_level {
-        next_stage_level = current_stage + 1;
-        is_updated = true;
-    } else {
-        let max_global_level = learn_model::Entity::find()
-            .select_only()
-            .column(learn_model::Column::Level)
-            .order_by_desc(learn_model::Column::Level)
-            .into_tuple::<i32>()
-            .one(db)
-            .await
-            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
-            .unwrap_or(0);
-
-        if current_level < max_global_level {
-            next_level = current_level + 1;
-            next_stage_level = 1;
+    // STEP check: Only update if the user's current level/stage matches the request
+    if current_level == data.current_level && current_stage == data.current_stage {
+        if current_stage < max_stage_in_current_level {
+            next_stage_level = current_stage + 1;
             is_updated = true;
+        } else {
+            let max_global_level = learn_model::Entity::find()
+                .select_only()
+                .column(learn_model::Column::Level)
+                .order_by_desc(learn_model::Column::Level)
+                .into_tuple::<i32>()
+                .one(db)
+                .await
+                .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+                .unwrap_or(0);
+
+            if current_level < max_global_level {
+                next_level = current_level + 1;
+                next_stage_level = 1;
+                is_updated = true;
+            }
         }
     }
 
@@ -205,24 +219,27 @@ pub async fn check_read(
     let mut next_stage_level = current_stage;
     let mut is_updated = false;
 
-    if current_stage < max_stage_in_current_level {
-        next_stage_level = current_stage + 1;
-        is_updated = true;
-    } else {
-        let max_global_level = learn_model::Entity::find()
-            .select_only()
-            .column(learn_model::Column::Level)
-            .order_by_desc(learn_model::Column::Level)
-            .into_tuple::<i32>()
-            .one(db)
-            .await
-            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
-            .unwrap_or(0);
-
-        if current_level < max_global_level {
-            next_level = current_level + 1;
-            next_stage_level = 1;
+    // STEP check: Only update if the user's current level/stage matches the request
+    if current_level == data.current_level && current_stage == data.current_stage {
+        if current_stage < max_stage_in_current_level {
+            next_stage_level = current_stage + 1;
             is_updated = true;
+        } else {
+            let max_global_level = learn_model::Entity::find()
+                .select_only()
+                .column(learn_model::Column::Level)
+                .order_by_desc(learn_model::Column::Level)
+                .into_tuple::<i32>()
+                .one(db)
+                .await
+                .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+                .unwrap_or(0);
+
+            if current_level < max_global_level {
+                next_level = current_level + 1;
+                next_stage_level = 1;
+                is_updated = true;
+            }
         }
     }
 
@@ -327,24 +344,27 @@ pub async fn check_write(
     let mut next_stage_level = current_stage;
     let mut is_updated = false;
 
-    if current_stage < max_stage_in_current_level {
-        next_stage_level = current_stage + 1;
-        is_updated = true;
-    } else {
-        let max_global_level = learn_model::Entity::find()
-            .select_only()
-            .column(learn_model::Column::Level)
-            .order_by_desc(learn_model::Column::Level)
-            .into_tuple::<i32>()
-            .one(db)
-            .await
-            .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
-            .unwrap_or(0);
-
-        if current_level < max_global_level {
-            next_level = current_level + 1;
-            next_stage_level = 1;
+    // STEP check: Only update if the user's current level/stage matches the request
+    if current_level == data.current_level && current_stage == data.current_stage {
+        if current_stage < max_stage_in_current_level {
+            next_stage_level = current_stage + 1;
             is_updated = true;
+        } else {
+            let max_global_level = learn_model::Entity::find()
+                .select_only()
+                .column(learn_model::Column::Level)
+                .order_by_desc(learn_model::Column::Level)
+                .into_tuple::<i32>()
+                .one(db)
+                .await
+                .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+                .unwrap_or(0);
+
+            if current_level < max_global_level {
+                next_level = current_level + 1;
+                next_stage_level = 1;
+                is_updated = true;
+            }
         }
     }
 
