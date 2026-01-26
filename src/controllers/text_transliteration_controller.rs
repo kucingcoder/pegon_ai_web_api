@@ -4,11 +4,14 @@ use crate::models::{text_transliteration_model, user_model};
 use rocket::http::Status;
 use rocket::response::Redirect;
 use rocket::serde::json::{Json, serde_json::Value, serde_json::json};
-use rocket::{State, post};
+use rocket::{State, post, get};
 use rocket_dyn_templates::{Template, context};
 use sea_orm::QuerySelect;
 use sea_orm::*;
 use serde::{Deserialize, Serialize};
+
+use std::env;
+use reqwest::Client;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TextTransliterationRequest {
@@ -61,7 +64,9 @@ pub async fn transliterate(
     } else {
         "tanpa harakat".to_string()
     };
-    let generated_result = "hello world".to_string();
+    let generated_result = call_llama_cpp(&data.text, &instrution)
+        .await
+        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
 
     // simpan hasil transliteration
     text_transliteration_model::ActiveModel {
@@ -130,7 +135,16 @@ pub async fn add_in_transliterate_handle(
     } else {
         "tanpa harakat".to_string()
     };
-    let generated_result = "hello world".to_string();
+    
+    let generated_result = match call_llama_cpp(&data.text, &instrution).await {
+        Ok(res) => res,
+        Err(e) => {
+            return Ok(Json(json!({
+                "status": "error",
+                "message": format!("Gagal transliterasi: {}", e)
+            })));
+        }
+    };
 
     // simpan hasil transliteration
     let save_result = text_transliteration_model::ActiveModel {
@@ -153,4 +167,50 @@ pub async fn add_in_transliterate_handle(
     Ok(Json(json!({
         "result": generated_result
     })))
+}
+
+async fn call_llama_cpp(text: &str, instruction: &str) -> Result<String, String> {
+    let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
+    let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
+
+    let client = Client::new();
+    
+    // Append instruction to ensure the model follows context (harakat preference)
+    // Using the user provided template structure
+    let request_body = json!({
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a script converter that transforms Latin text into Arabic Pegon text."
+            },
+            {
+                "role": "user",
+                "content": text
+            }
+        ]
+    });
+
+    let url = format!("{}/v1/chat/completions", model_url);
+    
+    let resp = client.post(&url)
+        .header("Authorization", format!("Bearer {}", api_key))
+        .json(&request_body)
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+        
+    if !resp.status().is_success() {
+        let status = resp.status();
+        let text = resp.text().await.unwrap_or_default();
+        return Err(format!("Model API Error {}: {}", status, text));
+    }
+    
+    let json: Value = resp.json().await.map_err(|e| format!("Failed to parse JSON: {}", e))?;
+    
+    let content = json["choices"][0]["message"]["content"]
+        .as_str()
+        .unwrap_or("")
+        .to_string();
+        
+    Ok(content)
 }
