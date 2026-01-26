@@ -173,7 +173,10 @@ async fn call_llama_cpp(text: &str, instruction: &str) -> Result<String, String>
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
 
-    let client = Client::new();
+    let client = Client::builder()
+        .timeout(std::time::Duration::from_secs(60))
+        .build()
+        .map_err(|e| format!("Client build error: {}", e))?;
     
     // Append instruction to ensure the model follows context (harakat preference)
     // Using the user provided template structure

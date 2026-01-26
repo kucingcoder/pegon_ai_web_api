@@ -239,7 +239,10 @@ async fn call_llama_cpp_vision(image_path: &Path, ext: &str) -> Result<String, S
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
 
-    let client = Client::new();
+    let client = Client::builder()
+        .timeout(std::time::Duration::from_secs(60))
+        .build()
+        .map_err(|e| format!("Client build error: {}", e))?;
 
     let image_data = std::fs::read(image_path).map_err(|e| format!("Failed to read image: {}", e))?;
     let base64_image = general_purpose::STANDARD.encode(&image_data);
