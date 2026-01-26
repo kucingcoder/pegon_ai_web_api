@@ -56,7 +56,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Users::LearningStageLevel)
                             .integer()
                             .not_null()
-                            .default(1),
+                            .default(0),
                     )
                     .col(ColumnDef::new(Users::CreatedAt).timestamp().null())
                     .col(ColumnDef::new(Users::UpdatedAt).timestamp().null())

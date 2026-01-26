@@ -83,7 +83,7 @@ pub async fn login(
                 date_of_birth: Set(NaiveDate::from_ymd_opt(2000, 1, 1).unwrap()),
                 category: Set(Category::Standard),
                 learning_level: Set(1),
-                learning_stage_level: Set(1),
+                learning_stage_level: Set(0),
                 ..Default::default()
             };
 
