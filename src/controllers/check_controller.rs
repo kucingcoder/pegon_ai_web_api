@@ -1,4 +1,5 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
+use base64::Engine;
 use crate::models::{learn_model, user_model};
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
@@ -258,15 +259,42 @@ pub async fn check_write(
     let db = db as &DatabaseConnection;
 
     // Unpack form data
-    let data = form_data.into_inner();
-    let detected_text = "selamat pagi";
+    let mut data = form_data.into_inner();
+    
+    // Save temp file to process
+    let upload_dir = "images/temp";
+    let filename = format!("{}.jpg", uuid::Uuid::new_v4());
+    let save_path = std::path::Path::new(upload_dir).join(&filename);
+    
+    // Ensure directory exists
+    if !std::path::Path::new(upload_dir).exists() {
+        std::fs::create_dir_all(upload_dir).map_err(|_| (Status::InternalServerError, "Failed to create temp dir".to_string()))?;
+    }
 
-    // VALIDASI: Trim whitespace & Case Insensitive
-    if detected_text.trim().to_lowercase() != data.real_text.trim().to_lowercase() {
-        return Err((
-            Status::BadRequest,
-            "Jawaban salah atau tidak cocok.".to_string(),
-        ));
+    data.image.persist_to(&save_path).await
+        .map_err(|_| (Status::InternalServerError, "Gagal proses file".to_string()))?;
+        
+    let detected_text = call_llama_cpp_vision(&save_path, "jpg")
+        .await
+        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
+
+    // Cleanup temp file
+    let _ = std::fs::remove_file(&save_path);
+
+    // VALIDASI: Trim whitespace & Case Insensitive (Fuzzy logic could be better but sticking to strict for now)
+    // Using simple contains or levenshtein distance would be better for AI output relying on exact match
+    // For now, let's normalize both strings
+    let normalized_detected = detected_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
+    let normalized_real = data.real_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
+
+    if normalized_detected != normalized_real {
+        // Fallback: If AI includes extra polite text, try to see if real text is *contained* in detected
+        if !detected_text.to_lowercase().contains(&data.real_text.to_lowercase()) {
+             return Err((
+                Status::BadRequest,
+                format!("Jawaban salah. Terdeteksi: '{}'", detected_text),
+            ));
+        }
     }
 
     // STEP 1: Ambil Level & Stage User Saat Ini
@@ -342,4 +370,62 @@ pub async fn check_write(
         current_level: next_level,
         current_stage_level: next_stage_level,
     }))
+}
+
+async fn call_llama_cpp_vision(image_path: &std::path::Path, ext: &str) -> Result<String, String> {
+    let model_url = std::env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
+    let api_key = std::env::var("MODEL_API_KEY").unwrap_or_default();
+
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(60))
+        .build()
+        .map_err(|e| format!("Client build error: {}", e))?;
+
+    let image_data = std::fs::read(image_path).map_err(|e| format!("Failed to read image: {}", e))?;
+    let base64_image = base64::engine::general_purpose::STANDARD.encode(&image_data);
+    let data_url = format!("data:image/{};base64,{}", ext, base64_image);
+
+    let request_body = json!({
+        "messages": [
+            {
+                "role": "system",
+                "content": "Pegon text is an Arabic-like script used to write manuscripts in Javanese, Indonesian, Malay, Sundanese, and Madurese. Perform character recognition on the following Pegon text and render the results in Latin for easy reading."
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": data_url
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    let url = format!("{}/v1/chat/completions", model_url);
+
+    let resp = client.post(&url)
+        .header("Authorization", format!("Bearer {}", api_key))
+        .json(&request_body)
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if !resp.status().is_success() {
+        let status = resp.status();
+        let text = resp.text().await.unwrap_or_default();
+        return Err(format!("Model API Error {}: {}", status, text));
+    }
+
+    let json: Value = resp.json().await.map_err(|e| format!("Failed to parse JSON: {}", e))?;
+
+    let content = json["choices"][0]["message"]["content"]
+        .as_str()
+        .unwrap_or("")
+        .to_string();
+
+    Ok(content)
 }
