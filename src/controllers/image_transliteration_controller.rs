@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use std::path::Path;
 use uuid::Uuid;
+use base64::{Engine as _, engine::general_purpose};
+use reqwest::Client;
 
 use crate::middlewares::auth_guard::AuthenticatedUser;
 use crate::models::sea_orm_active_enums::Category;
@@ -89,8 +91,11 @@ pub async fn transliterate(
         .await
         .map_err(|_| (Status::InternalServerError, "Gagal simpan file".to_string()))?;
 
-    let result = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In iaculis nulla diam, id vehicula sem interdum id. Fusce massa est, venenatis quis risus in, congue suscipit nibh. Fusce tincidunt enim eget eros gravida lacinia. Pellentesque faucibus, velit ac lobortis iaculis, libero urna bibendum odio, id pharetra dolor nunc non nisi. Vivamus tincidunt varius felis, ac sagittis tellus placerat vitae. Curabitur sollicitudin ligula eu dui mollis tincidunt. Ut elit mauris, ultrices commodo vulputate ac, elementum et orci.".to_string();
     let url = make_full_url(&format!("transliterations/{}", filename));
+    
+    let result = call_llama_cpp_vision(&save_path, ext)
+        .await
+        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
     let new_image_transliteration = image_transliteration_model::ActiveModel {
@@ -228,4 +233,59 @@ pub async fn update_title(
         .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
 
     Ok(Status::Ok)
+}
+
+async fn call_llama_cpp_vision(image_path: &Path, ext: &str) -> Result<String, String> {
+    let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
+    let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
+
+    let client = Client::new();
+
+    let image_data = std::fs::read(image_path).map_err(|e| format!("Failed to read image: {}", e))?;
+    let base64_image = general_purpose::STANDARD.encode(&image_data);
+    let data_url = format!("data:image/{};base64,{}", ext, base64_image);
+
+    let request_body = json!({
+        "messages": [
+            {
+                "role": "system",
+                "content": "Pegon text is an Arabic-like script used to write manuscripts in Javanese, Indonesian, Malay, Sundanese, and Madurese. Perform character recognition on the following Pegon text and render the results in Latin for easy reading."
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": data_url
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    let url = format!("{}/v1/chat/completions", model_url);
+
+    let resp = client.post(&url)
+        .header("Authorization", format!("Bearer {}", api_key))
+        .json(&request_body)
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if !resp.status().is_success() {
+        let status = resp.status();
+        let text = resp.text().await.unwrap_or_default();
+        return Err(format!("Model API Error {}: {}", status, text));
+    }
+
+    let json: Value = resp.json().await.map_err(|e| format!("Failed to parse JSON: {}", e))?;
+
+    let content = json["choices"][0]["message"]["content"]
+        .as_str()
+        .unwrap_or("")
+        .to_string();
+
+    Ok(content)
 }
