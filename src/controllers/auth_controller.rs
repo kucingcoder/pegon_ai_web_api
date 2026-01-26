@@ -41,14 +41,13 @@ pub struct GoogleTokenPayload {
 #[post("/login", data = "<data>")]
 pub async fn login(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     cookies: &CookieJar<'_>,
     data: Json<GoogleLoginRequest>,
 ) -> Result<Status, Status> {
     let db = db as &DatabaseConnection;
-    let client = Client::builder()
-        .timeout(std::time::Duration::from_secs(15))
-        .build()
-        .map_err(|_| Status::InternalServerError)?;
+    // Client reused from state
+    
     let google_validation_url = "https://oauth2.googleapis.com/tokeninfo";
     let resp = client
         .get(google_validation_url)

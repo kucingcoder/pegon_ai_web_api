@@ -22,6 +22,7 @@ pub struct TextTransliterationRequest {
 #[post("/transliteration/text", data = "<data>")]
 pub async fn transliterate(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     auth: AuthenticatedUser,
     data: Json<TextTransliterationRequest>,
 ) -> Result<Json<Value>, (Status, String)> {
@@ -64,7 +65,7 @@ pub async fn transliterate(
     } else {
         "tanpa harakat".to_string()
     };
-    let generated_result = call_llama_cpp(&data.text, &instrution)
+    let generated_result = call_llama_cpp(client, &data.text, &instrution)
         .await
         .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
 
@@ -111,6 +112,7 @@ pub async fn add_in_transliterate_view(
 #[post("/transliteration/add-in-transliterate-handle", data = "<data>")]
 pub async fn add_in_transliterate_handle(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     auth: AuthenticatedUser,
     data: Json<TextTransliterationRequest>,
 ) -> Result<Json<Value>, Redirect> {
@@ -136,7 +138,7 @@ pub async fn add_in_transliterate_handle(
         "tanpa harakat".to_string()
     };
     
-    let generated_result = match call_llama_cpp(&data.text, &instrution).await {
+    let generated_result = match call_llama_cpp(client, &data.text, &instrution).await {
         Ok(res) => res,
         Err(e) => {
             return Ok(Json(json!({
@@ -169,22 +171,18 @@ pub async fn add_in_transliterate_handle(
     })))
 }
 
-async fn call_llama_cpp(text: &str, instruction: &str) -> Result<String, String> {
+async fn call_llama_cpp(client: &Client, text: &str, instruction: &str) -> Result<String, String> {
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
 
-    let client = Client::builder()
-        .timeout(std::time::Duration::from_secs(60))
-        .build()
-        .map_err(|e| format!("Client build error: {}", e))?;
     
     // Append instruction to ensure the model follows context (harakat preference)
-    // Using the user provided template structure
+    let system_message = format!("You are a script converter that transforms Latin text into Arabic Pegon text. {}", instruction);
     let request_body = json!({
         "messages": [
             {
                 "role": "system",
-                "content": "You are a script converter that transforms Latin text into Arabic Pegon text."
+                "content": system_message
             },
             {
                 "role": "user",

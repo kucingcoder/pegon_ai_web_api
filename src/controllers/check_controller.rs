@@ -1,4 +1,5 @@
 use crate::middlewares::auth_guard::AuthenticatedUser;
+use reqwest::Client;
 use base64::Engine;
 use crate::models::{learn_model, user_model};
 use rocket::form::{Form, FromForm};
@@ -49,30 +50,38 @@ pub async fn check_level_stage(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    let (current_level, current_stage) = user_model::Entity::find_by_id(auth.id)
+    // 1. Future User
+    let user_future = user_model::Entity::find_by_id(auth.id)
         .select_only()
         .column(user_model::Column::LearningLevel)
         .column(user_model::Column::LearningStageLevel)
         .into_tuple::<(i32, i32)>()
-        .one(db)
-        .await
+        .one(db);
+
+    // 2. Future Max Level
+    let max_level_future = learn_model::Entity::find()
+        .select_only()
+        .column(learn_model::Column::Level)
+        .order_by_desc(learn_model::Column::Level)
+        .into_tuple::<i32>()
+        .one(db);
+
+    // EKSEKUSI PARALLEL
+    let (user_res, max_level_res) = rocket::tokio::join!(user_future, max_level_future);
+
+    let (current_level, current_stage) = user_res
         .map_err(|e| (Status::InternalServerError, e.to_string()))?
         .ok_or((Status::NotFound, "User not found".to_string()))?;
 
+    let max_level = max_level_res
+        .map_err(|e| (Status::InternalServerError, e.to_string()))?
+        .ok_or((Status::NotFound, "Level not found".to_string()))?;
+
+    // 3. Max Stage (Dependent on user level)
     let max_stage_in_current_level = learn_model::Entity::find()
         .filter(learn_model::Column::Level.eq(current_level))
         .select_only()
         .column(learn_model::Column::MaxStage)
-        .into_tuple::<i32>()
-        .one(db)
-        .await
-        .map_err(|e| (Status::InternalServerError, e.to_string()))?
-        .ok_or((Status::NotFound, "Level not found".to_string()))?;
-
-    let max_level = learn_model::Entity::find()
-        .select_only()
-        .column(learn_model::Column::Level)
-        .order_by_desc(learn_model::Column::Level)
         .into_tuple::<i32>()
         .one(db)
         .await
@@ -270,6 +279,7 @@ pub async fn check_read(
 #[post("/check/write", data = "<form_data>")]
 pub async fn check_write(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     auth: AuthenticatedUser,
     form_data: Form<CheckWriteRequest<'_>>,
 ) -> Result<Json<CheckResponse>, (Status, String)> {
@@ -291,7 +301,7 @@ pub async fn check_write(
     data.image.persist_to(&save_path).await
         .map_err(|_| (Status::InternalServerError, "Gagal proses file".to_string()))?;
         
-    let detected_text = call_llama_cpp_vision(&save_path, "jpg")
+    let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
         .await
         .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
 
@@ -392,14 +402,9 @@ pub async fn check_write(
     }))
 }
 
-async fn call_llama_cpp_vision(image_path: &std::path::Path, ext: &str) -> Result<String, String> {
+async fn call_llama_cpp_vision(client: &Client, image_path: &std::path::Path, ext: &str) -> Result<String, String> {
     let model_url = std::env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = std::env::var("MODEL_API_KEY").unwrap_or_default();
-
-    let client = reqwest::Client::builder()
-        .timeout(std::time::Duration::from_secs(60))
-        .build()
-        .map_err(|e| format!("Client build error: {}", e))?;
 
     let image_data = std::fs::read(image_path).map_err(|e| format!("Failed to read image: {}", e))?;
     let base64_image = base64::engine::general_purpose::STANDARD.encode(&image_data);

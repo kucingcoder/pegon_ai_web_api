@@ -30,6 +30,7 @@ pub struct ImageTransliterationRequest<'r> {
 #[post("/transliteration/image", data = "<form>")]
 pub async fn transliterate(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     auth: AuthenticatedUser,
     mut form: Form<ImageTransliterationRequest<'_>>,
 ) -> Result<Json<Value>, (Status, String)> {
@@ -93,7 +94,7 @@ pub async fn transliterate(
 
     let url = make_full_url(&format!("transliterations/{}", filename));
     
-    let result = call_llama_cpp_vision(&save_path, ext)
+    let result = call_llama_cpp_vision(client, &save_path, ext)
         .await
         .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
@@ -235,14 +236,9 @@ pub async fn update_title(
     Ok(Status::Ok)
 }
 
-async fn call_llama_cpp_vision(image_path: &Path, ext: &str) -> Result<String, String> {
+async fn call_llama_cpp_vision(client: &Client, image_path: &Path, ext: &str) -> Result<String, String> {
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
-
-    let client = Client::builder()
-        .timeout(std::time::Duration::from_secs(60))
-        .build()
-        .map_err(|e| format!("Client build error: {}", e))?;
 
     let image_data = std::fs::read(image_path).map_err(|e| format!("Failed to read image: {}", e))?;
     let base64_image = general_purpose::STANDARD.encode(&image_data);

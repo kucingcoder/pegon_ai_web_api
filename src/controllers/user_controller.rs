@@ -52,43 +52,23 @@ pub async fn get_profile_detail(
 ) -> Result<Json<Value>, (Status, String)> {
     let db = db as &DatabaseConnection;
 
-    // data diri user
-    let user_model = user_model::Entity::find_by_id(auth.id)
-        .one(db)
-        .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
-        .ok_or((Status::NotFound, "User not found".to_string()))?;
+    // Definisikan Future untuk query yang independen (bisa jalan bareng)
+    
+    // 1. Future User
+    let user_future = user_model::Entity::find_by_id(auth.id).one(db);
 
-    // max stage level
-    let max_stage = learn_model::Entity::find()
-        .filter(learn_model::Column::Level.eq(user_model.learning_level))
-        .select_only()
-        .column(learn_model::Column::MaxStage)
-        .into_tuple::<i32>()
-        .one(db)
-        .await
-        .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
-        .ok_or((
-            Status::NotFound,
-            "Konfigurasi level tidak ditemukan".to_string(),
-        ))?;
-
-    // data statistik text transliteration
-    let text_transliteration_count = text_transliteration_model::Entity::find()
+    // 2. Future Text Count
+    let text_count_future = text_transliteration_model::Entity::find()
         .filter(text_transliteration_model::Column::IdUser.eq(auth.id))
-        .count(db)
-        .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+        .count(db);
 
-    // data statistik image transliteration
-    let image_transliteration_count = image_transliteration_model::Entity::find()
+    // 3. Future Image Count
+    let image_count_future = image_transliteration_model::Entity::find()
         .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
-        .count(db)
-        .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+        .count(db);
 
-    // Riwayat image transliteration
-    let image_transliterations = image_transliteration_model::Entity::find()
+    // 4. Future Image History
+    let history_future = image_transliteration_model::Entity::find()
         .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
         .order_by_desc(image_transliteration_model::Column::CreatedAt)
         .limit(5)
@@ -107,9 +87,39 @@ pub async fn get_profile_detail(
             "result",
         )
         .into_json()
-        .all(db)
+        .all(db);
+
+    // EKSEKUSI PARALLEL
+    let (user_res, text_count_res, image_count_res, history_res) =
+        rocket::tokio::join!(user_future, text_count_future, image_count_future, history_future);
+
+    // Handle Hasil
+    let user_model = user_res
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .ok_or((Status::NotFound, "User not found".to_string()))?;
+
+    let text_transliteration_count =
+        text_count_res.map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    let image_transliteration_count =
+        image_count_res.map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    let image_transliterations =
+        history_res.map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+
+    // max stage level (Query ini bergantung pada user_model, jadi harus setelah user ketemu)
+    let max_stage = learn_model::Entity::find()
+        .filter(learn_model::Column::Level.eq(user_model.learning_level))
+        .select_only()
+        .column(learn_model::Column::MaxStage)
+        .into_tuple::<i32>()
+        .one(db)
         .await
-        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?;
+        .map_err(|e| (Status::InternalServerError, format!("Db Error: {}", e)))?
+        .ok_or((
+            Status::NotFound,
+            "Konfigurasi level tidak ditemukan".to_string(),
+        ))?;
 
     Ok(Json(json!({
         "user": {

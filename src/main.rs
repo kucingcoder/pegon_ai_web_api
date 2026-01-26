@@ -25,9 +25,16 @@ async fn rocket() -> _ {
     std::fs::create_dir_all("images/temp").expect("Gagal buat folder temp");
 
     // build rocket
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(60))
+        .build()
+        .expect("Gagal membuat HTTP Client");
+
     rocket::build()
         // database
         .manage(db)
+        // http client
+        .manage(client)
         // templates
         .attach(Template::fairing())
         // redirect login

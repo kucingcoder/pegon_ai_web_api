@@ -17,6 +17,7 @@ use crate::models::{transaction_model, user_model};
 #[post("/transaction/upgrade-to-premium")]
 pub async fn upgrade_to_premium(
     db: &State<DatabaseConnection>,
+    client: &State<Client>,
     auth: AuthenticatedUser,
 ) -> Result<json::Value, (Status, String)> {
     let db = db as &DatabaseConnection;
@@ -42,7 +43,7 @@ pub async fn upgrade_to_premium(
         env::var("MIDTRANS_SERVER_KEY").expect("MIDTRANS_SERVER_KEY must be set");
     let id_trasaction = Uuid::new_v4();
 
-    let client = Client::new();
+    // used shared client
     let resp = client
         .post(midtrans_url + "/v2/charge")
         .basic_auth(midtrans_server_key, Some(""))
