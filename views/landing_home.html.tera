@@ -184,7 +184,7 @@
                     <span class="text-transparent bg-clip-text gradient-primary">Era Digital</span>
                 </h1>
                 <p class="text-lg text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                    Membaca dan menulis aksara Pegon dengan mudah dengan teknologi AI yang cerdas. Belajar jadi lebih menyenangkan dan interaktif dengan kuis dan tes interaktif berbasis verifikasi suaran dan veriffikasi tulisan tangan.
+                    Membaca dan menulis aksara Pegon dengan mudah dengan teknologi AI yang cerdas. Belajar jadi lebih menyenangkan dan interaktif.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                     <a href="https://play.google.com" class="gradient-accent text-white font-bold text-lg py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center gap-3 w-full sm:w-auto justify-center">
@@ -237,16 +237,16 @@
                         <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Transliterasi Gambar</h3>
-                    <p class="text-gray-500 leading-relaxed">Ubah foto manuskrip pegon menjadi teks latin digital yang jernih dan dapat diedit dalam hitungan detik.</p>
+                    <p class="text-gray-500 leading-relaxed">Ubah foto manuskrip pegon menjadi teks latin digital yang jernih dan dapat dibaca dengan mudah dalam hitungan detik.</p>
                 </div>
 
                 <!-- Feature 2: Text Transliteration -->
                 <div class="bg-background rounded-3xl p-8 hover:bg-primary-light/30 transition-colors duration-300 group cursor-pointer border border-transparent hover:border-primary-light">
                     <div class="w-16 h-16 rounded-2xl bg-teal-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.204 8.842l-2.244-2.715 6.238 6.239 5.76-5.76M15 9l5 5m-5-5v6"></path></svg>
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     </div>
                     <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Transliterasi Teks</h3>
-                    <p class="text-gray-500 leading-relaxed">Ketik dalam Latin, keluar dalam Pegon. Konsisten dalam penggunaan harakat maupun tidak</p>
+                    <p class="text-gray-500 leading-relaxed">Ketik dalam Latin, keluar dalam Pegon. Konsisten dalam penggunaan harakat maupun tidak.</p>
                 </div>
 
                 <!-- Feature 3: Learning -->
@@ -255,7 +255,7 @@
                         <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
                     <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Belajar Interaktif</h3>
-                    <p class="text-gray-500 leading-relaxed">Modul pembelajaran yang menyenangkan dengan sistem level dan tracking progress. Dilengkapi kuis dan tes interaktif berbasis verifikasi suara dan verifikasi tulisan tangan.</p>
+                    <p class="text-gray-500 leading-relaxed">Pembelajaran yang menyenangkan dengan dilengkapi kuis dan tes interaktif verifikasi suara dan tulisan tangan.</p>
                 </div>
             </div>
         </div>
