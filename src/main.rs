@@ -46,7 +46,12 @@ async fn rocket() -> _ {
         .mount("/static", FileServer::from("static"))
         .mount("/images", FileServer::from("images"))
         // landing page
-        .mount("/", routes![controllers::home_controller::index])
+        .mount("/", routes![
+            controllers::home_controller::index,
+            controllers::home_controller::landing,
+            controllers::home_controller::app,
+            controllers::home_controller::contact
+        ])
         // add-in routes
         .mount(
             "/add-in",

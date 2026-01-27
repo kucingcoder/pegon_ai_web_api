@@ -1,4 +1,4 @@
 /target
 migration/target
-images
+/images
 .env

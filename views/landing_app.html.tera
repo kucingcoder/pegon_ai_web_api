@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitur Aplikasi - Pegon AI</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#009688', // The main Teal color
+                            dark: '#0f766e',
+                            light: '#e0f2f1',
+                        },
+                        accent: {
+                            DEFAULT: '#fbbf24', // The Amber/Yellow
+                            hover: '#f59e0b',
+                        },
+                        surface: '#ffffff',
+                        background: '#fffbf2',
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .gradient-primary {
+            background: linear-gradient(135deg, #009688 0%, #0d9488 100%);
+        }
+        .gradient-accent {
+            background: linear-gradient(135deg, #f97316 0%, #eab308 100%);
+        }
+
+        /* Login Screen Aesthetic Match */
+        .aesthetic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -50;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+        .soft-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+        /* Top Right Cream/Yellow Shape */
+        .shape-cream {
+            top: -10%;
+            right: -10%;
+            width: 80vw;
+            height: 80vw;
+            background-color: #FEF3C7; /* Soft Amber/Cream */
+        }
+        /* Bottom Left Teal Shape */
+        .shape-teal {
+            bottom: -10%;
+            left: -10%;
+            width: 80vw;
+            height: 80vw;
+            background-color: #E0F7FA; /* Soft Teal */
+        }
+        
+        /* Batik Pattern Overlay */
+        .batik-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/static/images/pegon_bg_texture.png');
+            background-size: 300px;
+            opacity: 0.03;
+            z-index: -40;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-transparent font-sans text-gray-800 antialiased selection:bg-accent selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="aesthetic-bg">
+        <div class="soft-shape shape-cream"></div>
+        <div class="soft-shape shape-teal"></div>
+    </div>
+    <div class="batik-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <img src="/static/images/logo.png" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-8">
+                     <a href="/landing" class="text-gray-500 hover:text-primary font-medium text-sm transition-colors">Beranda</a>
+                    <a href="/landing/app" class="text-primary font-semibold text-sm transition-colors border-b-2 border-primary">Aplikasi</a>
+                    <a href="/landing/contact" class="text-gray-500 hover:text-primary font-medium text-sm transition-colors">Kontak</a>
+                </div>
+                
+                <!-- Desktop CTA -->
+                <div class="hidden md:block">
+                     <a href="https://play.google.com" class="gradient-accent text-white font-bold py-2.5 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2 text-sm">
+                        <img src="/static/images/google_play_icon.png" class="h-5 w-5 object-contain" alt="Play Store">
+                        <span>Unduh Aplikasi</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 absolute inset-x-0 top-20 shadow-xl p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/landing" class="text-gray-600 hover:text-primary font-medium text-lg px-4 py-3 rounded-xl hover:bg-gray-50 text-center transition-colors">Beranda</a>
+            <a href="/landing/app" class="text-primary font-bold text-lg px-4 py-3 rounded-xl bg-teal-50 text-center">Aplikasi</a>
+            <a href="/landing/contact" class="text-gray-600 hover:text-primary font-medium text-lg px-4 py-3 rounded-xl hover:bg-gray-50 text-center transition-colors">Kontak</a>
+            <a href="https://play.google.com" class="gradient-accent text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-3 text-base mx-2 mt-2">
+                <img src="/static/images/google_play_icon.png" class="h-6 w-6 object-contain" alt="Play Store">
+                <span>Unduh Aplikasi</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-16 lg:pt-40 lg:pb-24 overflow-hidden text-center">
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+            <div class="inline-block px-4 py-1.5 bg-white border border-gray-100 rounded-full text-sm font-semibold text-primary mb-6 shadow-sm">
+                🚀 Teknologi AI Terbaru
+            </div>
+            <h1 class="font-display text-5xl lg:text-7xl font-bold mb-6 text-gray-900 tracking-tight">Teknologi Pelestari <br> <span class="text-transparent bg-clip-text gradient-primary">Budaya Bangsa</span></h1>
+            <p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">Menjembatani masa lalu yang berharga dengan masa depan yang cerdas melalui aplikasi yang intuitif.</p>
+        </div>
+    </header>
+
+    <!-- UI Feature Showcase -->
+    <section class="py-24 bg-white rounded-t-[3rem] shadow-[0_-20px_40px_rgba(0,0,0,0.02)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Image Transliteration -->
+            <div class="bg-gradient-to-br from-gray-50 to-white rounded-[2.5rem] p-8 lg:p-12 mb-20 shadow-card border border-gray-100">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                         <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-orange-500">
+                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                         </div>
+                         <h3 class="font-display text-3xl font-bold text-gray-900 mb-4">Scan Manusrip Kuno</h3>
+                         <p class="text-gray-500 mb-8 leading-relaxed text-lg">
+                             Teknologi OCR kami mengenali berbagai gaya tulisan Pegon, bahkan pada kertas yang sudah tua. Hasilnya instan dan akurat.
+                         </p>
+                         <div class="flex gap-4">
+                             <div class="bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3">
+                                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                 <span class="font-bold text-gray-700">Akurasi 95%+</span>
+                             </div>
+                             <div class="bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3">
+                                 <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                 <span class="font-bold text-gray-700">Export PDF/Doc</span>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="relative group">
+                         <div class="absolute inset-4 bg-gradient-accent rounded-[2rem] blur-lg opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+                         <img src="/static/images/before_after_transliteration.png" alt="Before and After Transliteration" class="relative rounded-[2rem] shadow-2xl border-4 border-white transform transition duration-500 hover:scale-[1.02]">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Transliteration UI Mockup -->
+            <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
+                 <div class="order-2 lg:order-1 relative">
+                     <!-- Abstract Decoration -->
+                     <div class="absolute -top-10 -left-10 w-40 h-40 bg-teal-100 rounded-full blur-3xl opacity-60"></div>
+                     <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-100 rounded-full blur-3xl opacity-60"></div>
+                     
+                     <div class="bg-white border border-gray-100 shadow-2xl rounded-[2.5rem] p-8 relative overflow-hidden">
+                         <!-- Mockup Header -->
+                         <div class="flex items-center justify-between mb-8">
+                             <h4 class="font-bold text-gray-900 text-lg">Editor Pegon</h4>
+                             <div class="flex gap-2">
+                                 <span class="px-3 py-1 bg-teal-50 text-primary text-xs font-bold rounded-lg">Auto-Harakat</span>
+                             </div>
+                         </div>
+                         
+                         <!-- Mockup Input -->
+                         <div class="bg-gray-50 rounded-2xl p-6 mb-4">
+                             <p class="text-gray-400 text-sm mb-2">Input (Latin)</p>
+                             <p class="font-medium text-gray-800 text-lg">Pegon adalah warisan nusantara...</p>
+                         </div>
+                         
+                         <!-- Arrow -->
+                         <div class="flex justify-center -my-3 relative z-10">
+                             <div class="bg-white p-2 rounded-full shadow-md border border-gray-100">
+                                 <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                             </div>
+                         </div>
+                         
+                         <!-- Mockup Output -->
+                         <div class="bg-teal-50 rounded-2xl p-6 mt-4 border border-teal-100">
+                             <p class="text-primary text-sm mb-2">Output (Pegon)</p>
+                             <p class="font-display font-medium text-teal-800 text-2xl text-right" dir="rtl">ڤڮون اداله واريثن...</p>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <div class="order-1 lg:order-2">
+                     <div class="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center mb-6 text-primary">
+                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                     </div>
+                     <h3 class="font-display text-3xl font-bold text-gray-900 mb-4">Editor Teks Real-time</h3>
+                     <p class="text-gray-500 leading-relaxed text-lg mb-6">
+                         Ketik langsung dalam aksara Pegon dengan keyboard virtual khusus kami, atau konversi teks Latin ke Pegon secara instan.
+                     </p>
+                     <ul class="space-y-4">
+                         <li class="flex items-center gap-3">
+                             <div class="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-primary text-xs font-bold">✓</div>
+                             <span class="text-gray-700 font-medium">Dukungan Harakat Lengkap</span>
+                         </li>
+                         <li class="flex items-center gap-3">
+                             <div class="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center text-primary text-xs font-bold">✓</div>
+                             <span class="text-gray-700 font-medium">Layout Keyboard Phonetic</span>
+                         </li>
+                     </ul>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gamification / Learning (Level Up Style) -->
+    <section class="py-24 bg-surface relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-[3rem] p-10 lg:p-20 text-white shadow-2xl relative overflow-hidden">
+                <!-- Decorative Circles -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400 opacity-20 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+
+                <div class="grid lg:grid-cols-2 gap-16 items-center relative z-10">
+                    <div>
+                         <span class="bg-white/20 px-4 py-1.5 rounded-full text-sm font-bold tracking-wide uppercase mb-6 inline-block backdrop-blur-sm border border-white/20">Gamifikasi</span>
+                         <h2 class="font-display text-4xl lg:text-5xl font-bold mb-6">Belajar Jadi Menyenangkan</h2>
+                         <p class="text-teal-100 text-lg mb-8 leading-relaxed">
+                             Selesaikan misi harian, naikkan level, dan dapatkan badge eksklusif. Sistem pembelajaran kami dirancang agar Anda tidak cepat bosan.
+                         </p>
+                         
+                         <!-- Stats Mockup -->
+                         <div class="flex gap-6">
+                             <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex-1">
+                                 <div class="text-3xl font-bold text-accent mb-1">XP</div>
+                                 <div class="text-xs text-teal-100">Experience Points</div>
+                             </div>
+                             <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex-1">
+                                 <div class="text-3xl font-bold text-accent mb-1">Lvl 3</div>
+                                 <div class="text-xs text-teal-100">Current Level</div>
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- Level Card Mockup (Matching Screenshot) -->
+                    <div class="bg-white text-gray-800 p-6 rounded-[2.5rem] shadow-lg transform rotate-2 hover:rotate-0 transition-all duration-500">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-bold text-gray-500 text-sm uppercase tracking-wider">Progres Belajar</h3>
+                                <div class="text-3xl font-display font-bold text-primary">Level 3</div>
+                            </div>
+                            <div class="flex gap-1 text-accent">
+                                ★ ★ ★ ★ ★
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="relative py-2 mb-4">
+                            <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent w-3/4 rounded-full"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium mb-6">2 dari 3 tahap diselesaikan</p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-background rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+                                <img src="/static/images/reading_test_wave.png" class="h-10 object-contain opacity-80" alt="Reading">
+                                <span class="text-xs font-bold text-gray-600">Tes Baca</span>
+                            </div>
+                            <div class="bg-background rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+                                <img src="/static/images/writing_test_stylus.png" class="h-10 object-contain opacity-80" alt="Writing">
+                                <span class="text-xs font-bold text-gray-600">Tes Tulis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 pt-16 pb-12 border-t border-gray-200 mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-2">
+                     <a href="/" class="flex items-center gap-2 mb-6">
+                        <img src="/static/images/logo.png" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
+                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
+                    </a>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
+                        Melestarikan warisan budaya nusantara melalui kecerdasan buatan. Jembatan antara masa lalu yang berharga dan masa depan yang cerdas.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-6">Navigasi</h4>
+                    <ul class="space-y-4 text-sm text-gray-500">
+                         <li><a href="/landing" class="hover:text-primary transition-colors">Beranda</a></li>
+                        <li><a href="/landing/app" class="hover:text-primary transition-colors">Aplikasi</a></li>
+                        <li><a href="/landing/contact" class="hover:text-primary transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+                
+                 <!-- Legal -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-6">Legal</h4>
+                    <ul class="space-y-4 text-sm text-gray-500">
+                         <li><a href="#" class="hover:text-primary transition-colors">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Lisensi</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+             <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Made with istiqomah for History.</p>
+                
+                <!-- Socials -->
+                <div class="flex space-x-4">
+                     <a href="#" class="text-gray-400 hover:text-primary transition-colors p-2 hover:bg-teal-50 rounded-full">
+                        <span class="sr-only">Instagram</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
