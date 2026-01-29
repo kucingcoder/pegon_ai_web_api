@@ -46,6 +46,21 @@
                     boxShadow: {
                         'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
                         'card': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)',
+                    },
+                    keyframes: {
+                        'fade-in-down': {
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(-10px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            },
+                        }
+                    },
+                    animation: {
+                        'fade-in-down': 'fade-in-down 0.5s ease-out'
                     }
                 }
             }
@@ -153,14 +168,15 @@
         const mobileMenu = document.getElementById('mobile-menu');
         
         if (mobileBtn && mobileMenu) {
-            mobileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
+            mobileBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
 
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target)) {
+                if (!mobileMenu.classList.contains('hidden') && 
+                    !mobileMenu.contains(e.target) && 
+                    !mobileBtn.contains(e.target)) {
                     mobileMenu.classList.add('hidden');
                 }
             });
@@ -175,7 +191,7 @@
     </script>
 
     <!-- Header / Title -->
-    <header class="pt-32 pb-12 lg:pt-40 lg:pb-16 text-center px-4">
+    <header class="relative pt-40 pb-12 lg:pt-48 lg:pb-16 text-center px-4">
         <h1 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Lisensi dan Hak Cipta</h1>
         <p class="text-gray-500 text-lg max-w-2xl mx-auto">
             Informasi mengenai hak kekayaan intelektual dan lisensi pihak ketiga.
