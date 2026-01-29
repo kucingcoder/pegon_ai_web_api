@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pegon AI - Kebijakan Privasi</title>
+    <title>Kebijakan Privasi - Pegon AI</title>
+    <meta name="description" content="Kebijakan Privasi Pegon AI menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda saat menggunakan layanan kami.">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pegon.ai/landing/privacy">
+    <meta property="og:title" content="Kebijakan Privasi - Pegon AI">
+    <meta property="og:description" content="Komitmen kami untuk melindungi privasi dan data pribadi pengguna Pegon AI.">
+    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
     <link rel="icon" type="image/png" href="/static/images/logo.webp">
     
     <!-- Fonts -->

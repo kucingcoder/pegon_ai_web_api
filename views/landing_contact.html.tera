@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pegon AI - Kontak</title>
+    <title>Hubungi Kami - Pegon AI</title>
+    <meta name="description" content="Hubungi tim Pegon AI untuk pertanyaan, dukungan, atau kolaborasi. Bersama melestarikan warisan budaya nusantara dengan teknologi.">
+    <meta name="keywords" content="kontak pegon ai, dukungan pegon ai, call center pegon, alamat pegon ai, kerjasama pegon, email support pegon">
+    <meta name="author" content="Tim Pegon AI">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pegon.ai/landing/contact">
+    <meta property="og:title" content="Hubungi Kami - Pegon AI">
+    <meta property="og:description" content="Tim Pegon AI siap membantu Anda dalam pelestarian budaya melalui teknologi.">
+    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
+
+    <link rel="canonical" href="https://pegon.ai/landing/contact">
     <link rel="icon" type="image/png" href="/static/images/logo.webp">
     
     <!-- Fonts -->

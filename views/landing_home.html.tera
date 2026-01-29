@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pegon AI - Pelestarian Aksara Pegon</title>
+    <title>Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik</title>
+    <meta name="description" content="Aplikasi No.1 untuk ubah Latin ke Pegon dan Pegon ke Latin secara instan dengan AI. Fitur lengkap: Scan OCR foto kitab/tulisan tangan/manuskrip kuno menjadi teks latin digital, dan gamifikasi belajar aksara. Solusi digital terbaik untuk santri, akademisi, dan pelestari budaya.">
+    <meta name="keywords" content="pegon ai, aplikasi pegon, transliterasi pegon, latin ke pegon, pegon ke latin, translate pegon, kamus pegon, keyboard pegon, arab jawa, arab melayu, huruf jawi, tulisan arab melayu, scan pegon, ocr pegon, foto jadi teks pegon, belajar nulis pegon, santri, pesantren, kitab kuning, makna gandul, makna pesantren, nu, muhammadiyah, digitalisasi manuskrip, ai islam, teknologi pesantren, pegonku alternatif, asbab pegon alternatif">
+    <meta name="author" content="Tim Pegon AI">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pegon.ai/">
+    <meta property="og:title" content="Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik">
+    <meta property="og:description" content="Ubah Latin ke Pegon & sebaliknya dalam hitungan detik. Dilengkapi OCR AI untuk scan foto dan fitur belajar interaktif. Download sekarang!">
+    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pegon.ai/">
+    <meta property="twitter:title" content="Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik">
+    <meta property="twitter:description" content="Ubah Latin ke Pegon & sebaliknya dalam hitungan detik. Dilengkapi OCR AI untuk scan foto dan fitur belajar interaktif.">
+    <meta property="twitter:image" content="https://pegon.ai/static/images/logo.png">
+    
+    <link rel="canonical" href="https://pegon.ai/">
     <link rel="icon" type="image/png" href="/static/images/logo.webp">
     
     <!-- Fonts -->

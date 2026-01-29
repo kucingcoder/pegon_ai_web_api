@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pegon AI - Fitur Aplikasi</title>
+    <title>Fitur Pegon AI - Scan Foto, Transliterasi & Belajar</title>
+    <meta name="description" content="Satu aplikasi untuk semua kebutuhan Pegon: 1) Scan foto kitab/tulisan tangan jadi teks latin digital (OCR), 2) Convert Latin ke Pegon otomatis, 3) Belajar baca tulis Pegon dengan game seru. Teknologi AI tercanggih untuk santri dan umum.">
+    <meta name="keywords" content="scan pegon, foto ke teks pegon, ocr kitab kuning, transliterasi latin pegon, convert pegon online, belajar aksara arab, game edukasi islam, keyboard arab pegon, nulis pegon di hp, aplikasi santri, baca kitab gundul, teknologi pesantren, pegon translator">
+    <meta name="author" content="Tim Pegon AI">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pegon.ai/landing/app">
+    <meta property="og:title" content="Fitur Pegon AI - Scan Foto, Transliterasi & Belajar">
+    <meta property="og:description" content="Scan foto kitab jadi teks, ubah Latin ke Pegon instan, mapun belajar interaktif. Teknologi AI terlengkap." >
+    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pegon.ai/landing/app">
+    <meta property="twitter:title" content="Fitur Pegon AI - Scan Foto, Transliterasi & Belajar">
+    <meta property="twitter:description" content="Scan foto kitab jadi teks, ubah Latin ke Pegon instan, mapun belajar interaktif. Teknologi AI terlengkap.">
+    <meta property="twitter:image" content="https://pegon.ai/static/images/logo.png">
+
+    <link rel="canonical" href="https://pegon.ai/landing/app">
     <link rel="icon" type="image/png" href="/static/images/logo.webp">
     
     <!-- Fonts -->
