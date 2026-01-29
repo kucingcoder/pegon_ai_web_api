@@ -50,7 +50,10 @@ async fn rocket() -> _ {
             controllers::home_controller::index,
             controllers::home_controller::landing,
             controllers::home_controller::app,
-            controllers::home_controller::contact
+            controllers::home_controller::contact,
+            controllers::home_controller::privacy,
+            controllers::home_controller::terms,
+            controllers::home_controller::license
         ])
         // add-in routes
         .mount(

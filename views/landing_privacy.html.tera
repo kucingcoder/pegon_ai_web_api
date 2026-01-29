@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubungi Kami - Pegon AI</title>
+    <title>Kebijakan Privasi - Pegon AI</title>
     <link rel="icon" type="image/png" href="/static/images/logo.png">
     
     <!-- Fonts -->
@@ -120,7 +120,7 @@
                 <div class="hidden md:flex items-center gap-8">
                      <a href="/landing" class="text-gray-500 hover:text-primary font-medium text-sm transition-colors">Beranda</a>
                     <a href="/landing/app" class="text-gray-500 hover:text-primary font-medium text-sm transition-colors">Aplikasi</a>
-                    <a href="/landing/contact" class="text-primary font-semibold text-sm transition-colors border-b-2 border-primary">Kontak</a>
+                    <a href="/landing/contact" class="text-gray-500 hover:text-primary font-medium text-sm transition-colors">Kontak</a>
                 </div>
                 
                 <!-- Desktop CTA -->
@@ -146,7 +146,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 absolute inset-x-0 top-20 shadow-xl p-6 flex flex-col gap-4 animate-fade-in-down">
             <a href="/landing" class="text-gray-600 hover:text-primary font-medium text-lg px-4 py-3 rounded-xl hover:bg-gray-50 text-center transition-colors">Beranda</a>
             <a href="/landing/app" class="text-gray-600 hover:text-primary font-medium text-lg px-4 py-3 rounded-xl hover:bg-gray-50 text-center transition-colors">Aplikasi</a>
-            <a href="/landing/contact" class="text-primary font-bold text-lg px-4 py-3 rounded-xl bg-teal-50 text-center">Kontak</a>
+            <a href="/landing/contact" class="text-gray-600 hover:text-primary font-medium text-lg px-4 py-3 rounded-xl hover:bg-gray-50 text-center transition-colors">Kontak</a>
             <a href="https://play.google.com" class="gradient-accent text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-3 text-base mx-2 mt-2">
                 <img src="/static/images/google_play_icon.png" class="h-6 w-6 object-contain" alt="Play Store">
                 <span>Unduh Aplikasi</span>
@@ -165,52 +165,95 @@
         }
     </script>
 
-    <!-- Content Wrapper -->
-    <main class="flex-grow pt-32 pb-12">
-        
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                 <h1 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Hubungi Kami</h1>
-                 <p class="text-gray-500 max-w-xl mx-auto">Punya pertanyaan atau masukan? Tim kami siap membantu Anda.</p>
-            </div>
+    <!-- Header / Title -->
+    <header class="pt-32 pb-12 lg:pt-40 lg:pb-16 text-center px-4">
+        <h1 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Kebijakan Privasi</h1>
+        <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+            Kami menghargai privasi Anda dan berkomitmen untuk melindungi data pribadi Anda.
+        </p>
+        <p class="text-sm text-gray-400 mt-4">Terakhir diperbarui: 16 Februari 2026</p>
+    </header>
 
-            <div class="max-w-3xl mx-auto">
-                
-                <!-- Contact Info -->
-                <div class="bg-white p-8 rounded-[2rem] shadow-soft border border-gray-100">
-                     <h3 class="font-display text-2xl font-bold text-gray-900 mb-8 text-center">Informasi Kontak</h3>
-                     
-                     <div class="space-y-8">
-                         <!-- Email -->
-                         <div class="flex items-center gap-5 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
-                             <div class="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-primary shrink-0">
-                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                             </div>
-                             <div>
-                                 <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Email Support</p>
-                                 <a href="mailto:support@pegon.ai" class="text-xl md:text-2xl font-medium text-gray-900 hover:text-primary transition-colors block">support@pegon.ai</a>
-                                 <p class="text-sm text-gray-500 mt-1">Kirimkan pertanyaan atau masukan Anda kapan saja</p>
-                             </div>
-                         </div>
-                         
-                         <!-- Socials -->
-                         <div class="flex items-center gap-5 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
-                             <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500 shrink-0">
-                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                             </div>
-                             <div class="w-full">
-                                 <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sosial Media</p>
-                                 <div class="flex gap-4">
-                                     <a href="https://www.instagram.com/pegon.ai" target="_blank" class="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-600 rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all">
-                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></path></svg>
-                                         <span class="font-medium">Instagram</span>
-                                     </a>
-                                 </div>
-                             </div>
-                         </div>
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div class="bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-lg prose-teal max-w-none">
+            
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">1. Pendahuluan</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Pegon AI adalah aplikasi yang didedikasikan untuk melestarikan dan memodernisasi penggunaan aksara Pegon. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan aplikasi dan layanan kami.
+                </p>
+                <p class="text-gray-600 leading-relaxed mt-4">
+                    Dengan menggunakan aplikasi Pegon AI, Anda menyetujui praktik data yang dijelaskan dalam kebijakan ini.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">2. Informasi yang Kami Kumpulkan</h2>
+                <div class="space-y-4 text-gray-600">
+                    <p><strong>a. Informasi Akun</strong><br>
+                    Saat Anda mendaftar, kami mengumpulkan informasi dasar seperti nama, alamat email, dan foto profil (melalui Google sign-in) untuk membuat akun Anda.</p>
+                    
+                    <p><strong>b. Data Gambar dan Teks</strong><br>
+                    Untuk fitur transliterasi, kami memproses gambar (manuskrip/tulisan tangan) dan teks yang Anda unggah. Data ini diproses oleh server AI kami untuk menghasilkan transliterasi.</p>
+                    
+                    <p><strong>c. Data Penggunaan</strong><br>
+                    Kami mengumpulkan data tentang bagaimana Anda berinteraksi dengan fitur aplikasi, seperti frekuensi penggunaan fitur transliterasi untuk meningkatkan kualitas layanan.</p>
+                </div>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">3. Penggunaan Data</h2>
+                <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                    <li>Menyediakan dan mengelola layanan transliterasi dan pembelajaran Pegon.</li>
+                    <li>Meningkatkan akurasi model AI transliterasi kami (dengan data yang telah dianonimisasi).</li>
+                    <li>Mengirimkan pembaruan terkait layanan dan dukungan pelanggan.</li>
+                    <li>Mencegah aktivitas penipuan atau penyalahgunaan aplikasi.</li>
+                </ul>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">4. Keamanan Data</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Kami menerapkan langkah-langkah keamanan teknis yang wajar untuk melindungi data Anda dari akses, penggunaan, atau pengungkapan yang tidak sah. Transmisi data dilakukan melalui protokol aman (HTTPS/SSL). Namun, perlu diingat bahwa tidak ada metode transmisi atau penyimpanan data elektronik yang 100% aman.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">5. Layanan Pihak Ketiga</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Aplikasi kami menggunakan layanan pihak ketiga yaitu Google OAuth (untuk otentikasi), Google AdMob (untuk periklanan), Midtrans (untuk pembayaran melalui QRIS). Layanan ini mungkin mengumpulkan informasi sesuai dengan kebijakan privasi mereka sendiri. Tautan ke kebijakan privasi penyedia layanan pihak ketiga yang digunakan oleh aplikasi:
+                </p>
+                <ul class="list-disc pl-5 mt-2 space-y-1 text-gray-600">
+                    <li><a target="_blank" href="https://developers.google.com/identity/protocols/oauth2/policies" class="text-primary hover:underline">Google OAuth</a></li>
+                    <li><a target="_blank" href="https://transparency.google/intl/en/our-policies/product-terms/google-admob" class="text-primary hover:underline">Google AdMob</a></li>
+                    <li><a target="_blank" href="https://midtrans.com/privacy-notice" class="text-primary hover:underline">Midtrans</a></li>
+                </ul>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">6. Hak Pengguna</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Anda memiliki hak untuk meminta akses, koreksi, atau penghapusan data pribadi Anda yang tersimpan di sistem kami. Untuk mengajukan permintaan ini, silakan hubungi tim dukungan kami melalui kontak yang tersedia.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">7. Hubungi Kami</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Jika Anda memiliki pertanyaan atau saran mengenai Kebijakan Privasi ini, jangan ragu untuk menghubungi kami di:
+                </p>
+                <div class="mt-4 p-6 bg-teal-50 rounded-2xl border border-teal-100 flex items-center gap-4">
+                     <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                      </div>
-                 </div>
-            </div>
+                     <div>
+                         <p class="text-xs font-bold text-gray-500 uppercase">Email</p>
+                         <a href="mailto:support@pegon.ai" class="text-lg font-bold text-gray-900 hover:text-primary transition-colors">support@pegon.ai</a>
+                     </div>
+                </div>
+            </section>
+
         </div>
     </main>
 
@@ -243,7 +286,7 @@
                 <div>
                      <h4 class="font-bold text-gray-900 mb-6">Legal</h4>
                     <ul class="space-y-4 text-sm text-gray-500">
-                         <li><a href="/landing/privacy" class="hover:text-primary transition-colors">Kebijakan Privasi</a></li>
+                         <li><a href="/landing/privacy" class="text-primary font-bold transition-colors">Kebijakan Privasi</a></li>
 <li><a href="/landing/terms" class="hover:text-primary transition-colors">Syarat & Ketentuan</a></li>
 <li><a href="/landing/license" class="hover:text-primary transition-colors">Lisensi</a></li>
                     </ul>
@@ -259,9 +302,7 @@
                      <a href="https://www.instagram.com/pegon.ai" target="_blank" class="text-gray-400 hover:text-primary transition-colors p-2 hover:bg-teal-50 rounded-full">
                         <span class="sr-only">Instagram</span>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></path></svg>
-                    </a>
-
-
+                     </a>
                 </div>
             </div>
         </div>

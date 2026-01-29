@@ -19,3 +19,18 @@ pub fn app() -> Template {
 pub fn contact() -> Template {
     Template::render("landing_contact", context! {})
 }
+
+#[get("/landing/privacy")]
+pub fn privacy() -> Template {
+    Template::render("landing_privacy", context! {})
+}
+
+#[get("/landing/terms")]
+pub fn terms() -> Template {
+    Template::render("landing_terms", context! {})
+}
+
+#[get("/landing/license")]
+pub fn license() -> Template {
+    Template::render("landing_license", context! {})
+}
