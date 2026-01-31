@@ -118,7 +118,7 @@
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
@@ -191,8 +191,8 @@
     </script>
 
     <!-- Header / Title -->
-    <header class="relative pt-40 pb-12 lg:pt-48 lg:pb-16 text-center px-4">
-        <h1 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Syarat & Ketentuan</h1>
+    <header class="relative pt-40 pb-12 lg:pt-48 lg:pb-16 text-center px-6">
+        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Syarat & Ketentuan</h1>
         <p class="text-gray-500 text-lg max-w-2xl mx-auto">
             Ketentuan penggunaan layanan Pegon AI. Mohon dibaca dengan seksama.
         </p>
@@ -200,7 +200,7 @@
     </header>
 
     <!-- Content -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <main class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 pb-24">
         <div class="bg-white p-6 md:p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-teal md:prose-lg max-w-none">
             
             <section class="mb-10">
@@ -277,7 +277,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-50 pt-16 pb-12 border-t border-gray-200 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">

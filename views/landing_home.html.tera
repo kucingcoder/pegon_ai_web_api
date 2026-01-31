@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik</title>
-    <meta name="description" content="Aplikasi No.1 untuk ubah Latin ke Pegon dan Pegon ke Latin secara instan dengan AI. Fitur lengkap: Scan OCR foto kitab/tulisan tangan/manuskrip kuno menjadi teks latin digital, dan gamifikasi belajar aksara. Solusi digital terbaik untuk santri, akademisi, dan pelestari budaya.">
+    <title>Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon</title>
+    <meta name="description" content="Aplikasi untuk ubah Latin ke Pegon dan Pegon ke Latin secara instan dengan AI. Fitur lengkap: Scan OCR foto kitab/tulisan tangan/manuskrip kuno menjadi teks latin digital, dan gamifikasi belajar aksara. Solusi digital terbaik untuk santri, akademisi, dan pelestari budaya.">
     <meta name="keywords" content="pegon, pegon ai, aplikasi pegon, transliterasi pegon, latin ke pegon, pegon ke latin, translate pegon, kamus pegon, keyboard pegon, arab jawa, arab melayu, huruf jawi, tulisan arab melayu, scan pegon, ocr pegon, foto jadi teks pegon, belajar nulis pegon, santri, pesantren, kitab kuning, makna gandul, makna pesantren, nu, muhammadiyah, digitalisasi manuskrip, ai islam, teknologi pesantren, pegonku alternatif, asbab pegon alternatif">
     <meta name="author" content="Tim Pegon AI">
     <meta name="robots" content="index, follow">
@@ -122,7 +122,7 @@
     
     <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
@@ -179,17 +179,17 @@
     <!-- Hero Section -->
     <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
+        <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
             <!-- Text Content -->
             <div class="lg:w-1/2 space-y-6 z-10 text-center lg:text-left">
                 <div class="inline-block px-4 py-1.5 bg-yellow-100 text-yellow-800 border border-yellow-200 rounded-full text-sm font-bold mb-2 tracking-wide uppercase">
                     ⭐ Warisan Budaya Nusantara
                 </div>
-                <h1 class="font-display text-5xl lg:text-7xl leading-tight font-extrabold text-gray-900">
+                <h1 class="font-display text-4xl lg:text-7xl leading-tight font-extrabold text-gray-900">
                     Aksara Pegon di <br>
                     <span class="text-transparent bg-clip-text gradient-primary">Era Digital</span>
                 </h1>
-                <p class="text-lg text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0">
                     Membaca dan menulis aksara Pegon dengan mudah dengan teknologi AI yang cerdas. Belajar jadi lebih menyenangkan dan interaktif.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
@@ -230,9 +230,9 @@
 
     <!-- Features Grid (Matching Dashboard Style) -->
     <section class="py-20 bg-white rounded-t-[3rem] shadow-[0_-20px_40px_rgba(0,0,0,0.02)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="text-center mb-16">
-                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">Fitur Utama</h2>
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-4">Fitur Utama</h2>
                 <div class="w-20 h-1.5 gradient-primary mx-auto rounded-full"></div>
             </div>
             
@@ -271,14 +271,14 @@
     <section class="py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-primary-light/40 -z-10"></div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="bg-white rounded-[3rem] p-8 lg:p-16 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
                 <!-- Checkered Background Pattern -->
                 <div class="absolute inset-0 bg-gray-50/50"></div>
                 
                 <div class="lg:w-1/2 relative z-10 text-center md:text-left">
                     <span class="text-accent font-bold tracking-wider uppercase text-sm mb-4 block">Gabung Sekarang</span>
-                    <h2 class="font-display text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Mulai Perjalanan Anda</h2>
+                    <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Mulai Perjalanan Anda</h2>
                     <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto md:mx-0">
                         Bergabunglah dengan ribuan pengguna lain untuk melestarikan dan mempelajari aksara Pegon dengan cara yang modern.
                     </p>
@@ -330,8 +330,8 @@
 
     <!-- Team Section -->
     <section class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="font-display text-3xl font-bold text-gray-900 mb-12">Tim Kami</h2>
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+            <h2 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-12">Tim Kami</h2>
             
             <div class="flex flex-wrap justify-center gap-10">
                 <!-- Team Member -->
@@ -375,7 +375,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-50 pt-16 pb-12 border-t border-gray-200 mt-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
