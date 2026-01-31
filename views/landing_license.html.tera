@@ -108,7 +108,7 @@
         }
     </style>
 </head>
-<body class="bg-transparent font-sans text-gray-800 antialiased selection:bg-accent selection:text-white flex flex-col min-h-screen">
+<body class="bg-transparent font-sans text-gray-800 antialiased selection:bg-accent selection:text-white flex flex-col min-h-screen overflow-x-hidden">
 
     <!-- Background Elements -->
     <div class="aesthetic-bg">
@@ -200,7 +200,7 @@
 
     <!-- Content -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div class="bg-white p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-lg prose-teal max-w-none">
+        <div class="bg-white p-6 md:p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-teal md:prose-lg max-w-none">
             
             <section class="mb-10">
                 <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">1. Hak Cipta Pegon AI</h2>
