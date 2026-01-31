@@ -13,7 +13,7 @@
     <meta property="og:title" content="Kebijakan Privasi - Pegon AI">
     <meta property="og:description" content="Komitmen kami untuk melindungi privasi dan data pribadi pengguna Pegon AI.">
     <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
-    <link rel="icon" type="image/png" href="/static/images/logo.webp">
+    <link rel="icon" type="image/webp" href="/static/images/navbar.webp">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,7 +121,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <img src="/static/images/logo.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
                     <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
                 </a>
                 

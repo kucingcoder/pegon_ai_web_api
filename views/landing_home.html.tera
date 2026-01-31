@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pegon AI - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik</title>
     <meta name="description" content="Aplikasi No.1 untuk ubah Latin ke Pegon dan Pegon ke Latin secara instan dengan AI. Fitur lengkap: Scan OCR foto kitab/tulisan tangan/manuskrip kuno menjadi teks latin digital, dan gamifikasi belajar aksara. Solusi digital terbaik untuk santri, akademisi, dan pelestari budaya.">
-    <meta name="keywords" content="pegon ai, aplikasi pegon, transliterasi pegon, latin ke pegon, pegon ke latin, translate pegon, kamus pegon, keyboard pegon, arab jawa, arab melayu, huruf jawi, tulisan arab melayu, scan pegon, ocr pegon, foto jadi teks pegon, belajar nulis pegon, santri, pesantren, kitab kuning, makna gandul, makna pesantren, nu, muhammadiyah, digitalisasi manuskrip, ai islam, teknologi pesantren, pegonku alternatif, asbab pegon alternatif">
+    <meta name="keywords" content="pegon, pegon ai, aplikasi pegon, transliterasi pegon, latin ke pegon, pegon ke latin, translate pegon, kamus pegon, keyboard pegon, arab jawa, arab melayu, huruf jawi, tulisan arab melayu, scan pegon, ocr pegon, foto jadi teks pegon, belajar nulis pegon, santri, pesantren, kitab kuning, makna gandul, makna pesantren, nu, muhammadiyah, digitalisasi manuskrip, ai islam, teknologi pesantren, pegonku alternatif, asbab pegon alternatif">
     <meta name="author" content="Tim Pegon AI">
     <meta name="robots" content="index, follow">
     
@@ -24,7 +24,7 @@
     <meta property="twitter:image" content="https://pegon.ai/static/images/logo.png">
     
     <link rel="canonical" href="https://pegon.ai/">
-    <link rel="icon" type="image/png" href="/static/images/logo.webp">
+    <link rel="icon" type="image/webp" href="/static/images/navbar.webp">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,7 +125,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <img src="/static/images/logo.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
                     <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
                 </a>
                 
