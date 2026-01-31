@@ -343,11 +343,11 @@
                     <div class="grid grid-cols-2 gap-4 lg:gap-6">
                         <div class="relative group/card mt-8 lg:mt-12 transform transition-all hover:-translate-y-2">
                             <div class="absolute -inset-2 bg-blue-400/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition duration-500"></div>
-                            <img src="/static/images/belajar_membaca.webp" class="relative w-full h-auto rounded-2xl shadow-lg border border-gray-100" alt="Belajar Membaca">
+                            <img src="/static/images/belajar_membaca.webp" class="relative w-full h-auto rounded-2xl border border-gray-100" alt="Belajar Membaca">
                         </div>
                         <div class="relative group/card mb-8 lg:mb-12 transform transition-all hover:-translate-y-2">
                             <div class="absolute -inset-2 bg-indigo-400/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition duration-500"></div>
-                            <img src="/static/images/belajar_menulis.webp" class="relative w-full h-auto rounded-2xl shadow-lg border border-gray-100" alt="Belajar Menulis">
+                            <img src="/static/images/belajar_menulis.webp" class="relative w-full h-auto rounded-2xl border border-gray-100" alt="Belajar Menulis">
                         </div>
                     </div>
                 </div>

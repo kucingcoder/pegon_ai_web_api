@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -201,7 +201,7 @@
 
     <!-- Content -->
     <main class="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 pb-24">
-        <div class="bg-white p-6 md:p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-teal md:prose-lg max-w-none">
+        <div class="bg-white p-6 md:p-8 lg:p-12 rounded-[2.5rem] shadow-soft border border-gray-100 prose prose-teal md:prose-lg max-w-none break-words">
             
             <section class="mb-10">
                 <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">1. Pendahuluan</h2>
