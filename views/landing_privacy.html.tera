@@ -320,7 +320,7 @@
             
             <!-- Bottom Bar -->
              <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Made with istiqomah for History.</p>
+                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Hak Cipta Dilindungi Undang-Undang.</p>
                 
                 <!-- Socials -->
                 <div class="flex space-x-4">
