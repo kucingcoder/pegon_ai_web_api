@@ -219,7 +219,7 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
-                        <img src="/static/images/logo.webp" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
+                        <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
                         <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
