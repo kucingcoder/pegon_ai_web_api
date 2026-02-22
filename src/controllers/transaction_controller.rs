@@ -62,20 +62,20 @@ pub async fn upgrade_to_premium(
           "item_details": [
             {
               "id": "1",
-              "price": 30000,
+              "price": 100,
               "quantity": 1,
               "name": "Pegon AI Premium 1 Bulan"
             },
             {
               "id": "2",
-              "price": 250,
+              "price": 1,
               "quantity": 1,
               "name": "biaya qris (0.7%)"
             }
           ],
           "transaction_details": {
             "order_id": id_trasaction.to_string(),
-            "gross_amount": 30250
+            "gross_amount": 101
           },
           "custom_expiry": {
             "expiry_duration": 15,
@@ -148,7 +148,7 @@ pub async fn upgrade_to_premium(
         id_user: Set(auth.id),
         id_midtrans: Set(midtrans_uuid),
         title: Set("Pegon AI Premium 1 Bulan".to_string()),
-        value: Set(30250),
+        value: Set(101),
         qr_code: Set(qr_code_url),
         status: Set(TransactionStatus::Pending),
         expired_at: Set(Some(expired_at_utc)),
