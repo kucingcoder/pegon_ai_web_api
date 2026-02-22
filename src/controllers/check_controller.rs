@@ -306,7 +306,7 @@ pub async fn check_write(
             
         let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
             .await
-            .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
+            .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
 
         // Cleanup temp file
         let _ = std::fs::remove_file(&save_path);

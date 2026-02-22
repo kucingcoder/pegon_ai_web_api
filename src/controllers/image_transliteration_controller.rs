@@ -96,7 +96,7 @@ pub async fn transliterate(
     
     let result = call_llama_cpp_vision(client, &save_path, ext)
         .await
-        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
+        .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
     let new_image_transliteration = image_transliteration_model::ActiveModel {

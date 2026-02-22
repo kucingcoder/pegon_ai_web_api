@@ -67,7 +67,7 @@ pub async fn transliterate(
     };
     let generated_result = call_llama_cpp(client, &data.text, &instrution)
         .await
-        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
+        .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
 
     // simpan hasil transliteration
     text_transliteration_model::ActiveModel {
@@ -140,10 +140,10 @@ pub async fn add_in_transliterate_handle(
     
     let generated_result = match call_llama_cpp(client, &data.text, &instrution).await {
         Ok(res) => res,
-        Err(e) => {
+        Err(_) => {
             return Ok(Json(json!({
                 "status": "error",
-                "message": format!("Gagal transliterasi: {}", e)
+                "message": "Gagal (Model dalam pemeliharaan)"
             })));
         }
     };
