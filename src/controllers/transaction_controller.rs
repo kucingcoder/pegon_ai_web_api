@@ -329,8 +329,11 @@ pub async fn notification(
     }
 
     if new_status == TransactionStatus::Success {
+        let new_expired_at = Utc::now() + chrono::Duration::days(30);
+
         user_model::Entity::update_many()
             .col_expr(user_model::Column::Category, Expr::value(Category::Premium))
+            .col_expr(user_model::Column::ExpiredAt, Expr::value(new_expired_at))
             .filter(user_model::Column::Id.eq(user_id))
             .exec(db as &DatabaseConnection)
             .await

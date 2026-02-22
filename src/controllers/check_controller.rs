@@ -176,7 +176,7 @@ pub async fn check_update_level_stage(
     // STEP 4: Return Response
     Ok(Json(CheckResponse {
         success: true,
-        message: "".to_string(),
+        message: "Jawaban benar!".to_string(),
         current_level: next_level,
         current_stage_level: next_stage_level,
     }))
@@ -288,39 +288,43 @@ pub async fn check_write(
     // Unpack form data
     let mut data = form_data.into_inner();
     
-    // Save temp file to process
-    let upload_dir = "images/temp";
-    let filename = format!("{}.jpg", uuid::Uuid::new_v4());
-    let save_path = std::path::Path::new(upload_dir).join(&filename);
-    
-    // Ensure directory exists
-    if !std::path::Path::new(upload_dir).exists() {
-        std::fs::create_dir_all(upload_dir).map_err(|_| (Status::InternalServerError, "Failed to create temp dir".to_string()))?;
-    }
+    let is_bypass = std::env::var("BYPASS_VISION").unwrap_or_else(|_| "false".to_string()) == "true";
 
-    data.image.persist_to(&save_path).await
-        .map_err(|_| (Status::InternalServerError, "Gagal proses file".to_string()))?;
+    if !is_bypass {
+        // Save temp file to process
+        let upload_dir = "images/temp";
+        let filename = format!("{}.jpg", uuid::Uuid::new_v4());
+        let save_path = std::path::Path::new(upload_dir).join(&filename);
         
-    let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
-        .await
-        .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
+        // Ensure directory exists
+        if !std::path::Path::new(upload_dir).exists() {
+            std::fs::create_dir_all(upload_dir).map_err(|_| (Status::InternalServerError, "Failed to create temp dir".to_string()))?;
+        }
 
-    // Cleanup temp file
-    let _ = std::fs::remove_file(&save_path);
+        data.image.persist_to(&save_path).await
+            .map_err(|_| (Status::InternalServerError, "Gagal proses file".to_string()))?;
+            
+        let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
+            .await
+            .map_err(|e| (Status::InternalServerError, format!("AI Error: {}", e)))?;
 
-    // VALIDASI: Trim whitespace & Case Insensitive (Fuzzy logic could be better but sticking to strict for now)
-    // Using simple contains or levenshtein distance would be better for AI output relying on exact match
-    // For now, let's normalize both strings
-    let normalized_detected = detected_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
-    let normalized_real = data.real_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
+        // Cleanup temp file
+        let _ = std::fs::remove_file(&save_path);
 
-    if normalized_detected != normalized_real {
-        // Fallback: If AI includes extra polite text, try to see if real text is *contained* in detected
-        if !detected_text.to_lowercase().contains(&data.real_text.to_lowercase()) {
-             return Err((
-                Status::BadRequest,
-                format!("Jawaban salah. Terdeteksi: '{}'", detected_text),
-            ));
+        // VALIDASI: Trim whitespace & Case Insensitive (Fuzzy logic could be better but sticking to strict for now)
+        // Using simple contains or levenshtein distance would be better for AI output relying on exact match
+        // For now, let's normalize both strings
+        let normalized_detected = detected_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
+        let normalized_real = data.real_text.trim().to_lowercase().replace(|c: char| !c.is_alphanumeric(), "");
+
+        if normalized_detected != normalized_real {
+            // Fallback: If AI includes extra polite text, try to see if real text is *contained* in detected
+            if !detected_text.to_lowercase().contains(&data.real_text.to_lowercase()) {
+                 return Err((
+                    Status::BadRequest,
+                    format!("Jawaban salah. Terdeteksi: '{}'", detected_text),
+                ));
+            }
         }
     }
 
