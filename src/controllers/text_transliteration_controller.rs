@@ -65,7 +65,7 @@ pub async fn transliterate(
     } else {
         "tanpa harakat".to_string()
     };
-    let generated_result = call_llama_cpp(client, &data.text, &instrution)
+    let generated_result = call_llama_cpp(client, &data.text)
         .await
         .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
 
@@ -138,7 +138,7 @@ pub async fn add_in_transliterate_handle(
         "tanpa harakat".to_string()
     };
     
-    let generated_result = match call_llama_cpp(client, &data.text, &instrution).await {
+    let generated_result = match call_llama_cpp(client, &data.text).await {
         Ok(res) => res,
         Err(_) => {
             return Ok(Json(json!({
@@ -171,18 +171,17 @@ pub async fn add_in_transliterate_handle(
     })))
 }
 
-async fn call_llama_cpp(client: &Client, text: &str, instruction: &str) -> Result<String, String> {
+async fn call_llama_cpp(client: &Client, text: &str) -> Result<String, String> {
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
 
     
     // Append instruction to ensure the model follows context (harakat preference)
-    let system_message = format!("You are a script converter that transforms Latin text into Arabic Pegon text. {}", instruction);
     let request_body = json!({
         "messages": [
             {
                 "role": "system",
-                "content": system_message
+                "content": "You are a machine that converts Latin script into Pegon/Jawi script. Convert user-supplied text into Pegon text with full vowels."
             },
             {
                 "role": "user",

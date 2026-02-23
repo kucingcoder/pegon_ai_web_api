@@ -248,7 +248,7 @@ async fn call_llama_cpp_vision(client: &Client, image_path: &Path, ext: &str) ->
         "messages": [
             {
                 "role": "system",
-                "content": "Pegon text is an Arabic-like script used to write manuscripts in Javanese, Indonesian, Malay, Sundanese, and Madurese. Perform character recognition on the following Pegon text and render the results in Latin for easy reading."
+                "content": "You are an OCR engine and convert Pegon/Jawi text in images into Latin script. Convert Pegon/Jawi text in user-supplied images into Latin text."
             },
             {
                 "role": "user",
