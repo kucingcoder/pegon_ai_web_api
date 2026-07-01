@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pegon - Aplikasi Transliterasi & Belajar Aksara Pegon</title>
+    <title>Smart Pegon - Sistem Literasi Digital Terpadu Aksara Pegon</title>
     <meta name="description" content="Aplikasi untuk ubah Latin ke Pegon dan Pegon ke Latin secara instan dengan AI. Fitur lengkap: Scan OCR foto kitab/tulisan tangan/manuskrip kuno menjadi teks latin digital, dan gamifikasi belajar aksara. Solusi digital terbaik untuk santri, akademisi, dan pelestari budaya.">
     <meta name="keywords" content="pegon, smart pegon, aplikasi pegon, transliterasi pegon, latin ke pegon, pegon ke latin, translate pegon, kamus pegon, keyboard pegon, arab jawa, arab melayu, huruf jawi, tulisan arab melayu, scan pegon, ocr pegon, foto jadi teks pegon, belajar nulis pegon, santri, pesantren, kitab kuning, makna gandul, makna pesantren, nu, muhammadiyah, digitalisasi manuskrip, ai islam, teknologi pesantren, pegonku alternatif, asbab pegon alternatif">
     <meta name="author" content="Tim Smart Pegon">
@@ -12,14 +12,14 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://smartpegon.nouren.web.id/">
-    <meta property="og:title" content="Smart Pegon - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik">
+    <meta property="og:title" content="Smart Pegon - Sistem Literasi Digital Terpadu Aksara Pegon Terbaik">
     <meta property="og:description" content="Ubah Latin ke Pegon & sebaliknya dalam hitungan detik. Dilengkapi OCR AI untuk scan foto dan fitur belajar interaktif. Download sekarang!">
     <meta property="og:image" content="https://smartpegon.nouren.web.id/static/images/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://smartpegon.nouren.web.id/">
-    <meta property="twitter:title" content="Smart Pegon - Aplikasi Transliterasi & Belajar Aksara Pegon Terbaik">
+    <meta property="twitter:title" content="Smart Pegon - Sistem Literasi Digital Terpadu Aksara Pegon Terbaik">
     <meta property="twitter:description" content="Ubah Latin ke Pegon & sebaliknya dalam hitungan detik. Dilengkapi OCR AI untuk scan foto dan fitur belajar interaktif.">
     <meta property="twitter:image" content="https://smartpegon.nouren.web.id/static/images/logo.png">
     
