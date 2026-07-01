@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitur Smart Pegon - Scan Foto, Transliterasi & Belajar</title>
     <meta name="description" content="Satu aplikasi untuk semua kebutuhan Pegon: 1) Scan foto kitab/tulisan tangan jadi teks latin digital (OCR), 2) Convert Latin ke Pegon otomatis, 3) Belajar baca tulis Pegon dengan game seru. Teknologi AI tercanggih untuk santri dan umum.">
-    <meta name="keywords" content="pegon, pegon ai, scan pegon, foto ke teks pegon, ocr kitab kuning, transliterasi latin pegon, convert pegon online, belajar aksara arab, game edukasi islam, keyboard arab pegon, nulis pegon di hp, aplikasi santri, baca kitab gundul, teknologi pesantren, pegon translator">
+    <meta name="keywords" content="pegon, smart pegon, scan pegon, foto ke teks pegon, ocr kitab kuning, transliterasi latin pegon, convert pegon online, belajar aksara arab, game edukasi islam, keyboard arab pegon, nulis pegon di hp, aplikasi santri, baca kitab gundul, teknologi pesantren, pegon translator">
     <meta name="author" content="Tim Smart Pegon">
     <meta name="robots" content="index, follow">
 
@@ -120,7 +120,7 @@
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
-                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
+                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">SMART PEGON</span>
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -387,7 +387,7 @@
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
                         <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
-                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
+                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">SMART PEGON</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
                         Melestarikan warisan budaya nusantara melalui kecerdasan buatan. Jembatan antara masa lalu yang berharga dan masa depan yang cerdas.

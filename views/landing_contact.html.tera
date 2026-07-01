@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hubungi Kami - Smart Pegon</title>
     <meta name="description" content="Hubungi tim Smart Pegon untuk pertanyaan, dukungan, atau kolaborasi. Bersama melestarikan warisan budaya nusantara dengan teknologi.">
-    <meta name="keywords" content="kontak pegon ai, dukungan pegon ai, call center pegon, alamat pegon ai, kerjasama pegon, email support pegon">
+    <meta name="keywords" content="kontak smart pegon, dukungan smart pegon, call center pegon, alamat smart pegon, kerjasama pegon, email support pegon">
     <meta name="author" content="Tim Smart Pegon">
     <meta name="robots" content="index, follow">
 
@@ -111,7 +111,7 @@
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
-                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
+                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">SMART PEGON</span>
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -186,7 +186,7 @@
                              </div>
                              <div>
                                  <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Email Support</p>
-                                 <a href="mailto:support@pegon.ai" class="text-xl md:text-2xl font-medium text-gray-900 hover:text-primary transition-colors block">support@pegon.ai</a>
+                                 <a href="mailto:hanif@mashanif.web.id" class="text-xl md:text-2xl font-medium text-gray-900 hover:text-primary transition-colors block">hanif@mashanif.web.id</a>
                                  <p class="text-sm text-gray-500 mt-1">Kirimkan pertanyaan atau masukan Anda kapan saja</p>
                              </div>
                          </div>
@@ -220,7 +220,7 @@
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
                         <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
-                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
+                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">SMART PEGON</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
                         Melestarikan warisan budaya nusantara melalui kecerdasan buatan. Jembatan antara masa lalu yang berharga dan masa depan yang cerdas.

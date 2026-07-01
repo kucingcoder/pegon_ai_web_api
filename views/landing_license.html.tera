@@ -122,7 +122,7 @@
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
-                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
+                    <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">SMART PEGON</span>
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -286,7 +286,7 @@
                      </div>
                      <div>
                          <p class="text-xs font-bold text-gray-500 uppercase">Email</p>
-                         <a href="mailto:support@pegon.ai" class="text-lg font-bold text-gray-900 hover:text-primary transition-colors">support@pegon.ai</a>
+                         <a href="mailto:hanif@mashanif.web.id" class="text-lg font-bold text-gray-900 hover:text-primary transition-colors">hanif@mashanif.web.id</a>
                      </div>
                 </div>
             </section>
@@ -302,7 +302,7 @@
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
                         <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
-                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
+                        <span class="text-gray-900 font-display font-bold text-xl tracking-tight">SMART PEGON</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
                         Melestarikan warisan budaya nusantara melalui kecerdasan buatan. Jembatan antara masa lalu yang berharga dan masa depan yang cerdas.
