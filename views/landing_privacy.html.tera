@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kebijakan Privasi - Pegon AI</title>
-    <meta name="description" content="Kebijakan Privasi Pegon AI menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda saat menggunakan layanan kami.">
+    <title>Kebijakan Privasi - Smart Pegon</title>
+    <meta name="description" content="Kebijakan Privasi Smart Pegon menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda saat menggunakan layanan kami.">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pegon.ai/landing/privacy">
-    <meta property="og:title" content="Kebijakan Privasi - Pegon AI">
-    <meta property="og:description" content="Komitmen kami untuk melindungi privasi dan data pribadi pengguna Pegon AI.">
+    <meta property="og:title" content="Kebijakan Privasi - Smart Pegon">
+    <meta property="og:description" content="Komitmen kami untuk melindungi privasi dan data pribadi pengguna Smart Pegon.">
     <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
     <link rel="icon" type="image/webp" href="/static/images/navbar.webp">
     
@@ -121,7 +121,7 @@
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
                     <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
                 </a>
                 
@@ -206,10 +206,10 @@
             <section class="mb-10">
                 <h2 class="font-display text-2xl font-bold text-gray-900 mb-4">1. Pendahuluan</h2>
                 <p class="text-gray-600 leading-relaxed">
-                    Pegon AI adalah aplikasi yang didedikasikan untuk melestarikan dan memodernisasi penggunaan aksara Pegon. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan aplikasi dan layanan kami.
+                    Smart Pegon adalah aplikasi yang didedikasikan untuk melestarikan dan memodernisasi penggunaan aksara Pegon. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan aplikasi dan layanan kami.
                 </p>
                 <p class="text-gray-600 leading-relaxed mt-4">
-                    Dengan menggunakan aplikasi Pegon AI, Anda menyetujui praktik data yang dijelaskan dalam kebijakan ini.
+                    Dengan menggunakan aplikasi Smart Pegon, Anda menyetujui praktik data yang dijelaskan dalam kebijakan ini.
                 </p>
             </section>
 
@@ -289,7 +289,7 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
-                        <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
+                        <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
                         <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
@@ -320,7 +320,7 @@
             
             <!-- Bottom Bar -->
              <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Hak Cipta Dilindungi Undang-Undang.</p>
+                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Smart Pegon. Hak Cipta Dilindungi Undang-Undang.</p>
                 
                 <!-- Socials -->
                 <div class="flex space-x-4">

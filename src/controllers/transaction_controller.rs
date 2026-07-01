@@ -64,7 +64,7 @@ pub async fn upgrade_to_premium(
               "id": "1",
               "price": 100,
               "quantity": 1,
-              "name": "Pegon AI Premium 1 Bulan"
+              "name": "Smart Pegon Premium 1 Bulan"
             },
             {
               "id": "2",
@@ -147,7 +147,7 @@ pub async fn upgrade_to_premium(
         id: Set(id_trasaction),
         id_user: Set(auth.id),
         id_midtrans: Set(midtrans_uuid),
-        title: Set("Pegon AI Premium 1 Bulan".to_string()),
+        title: Set("Smart Pegon Premium 1 Bulan".to_string()),
         value: Set(101),
         qr_code: Set(qr_code_url),
         status: Set(TransactionStatus::Pending),

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubungi Kami - Pegon AI</title>
-    <meta name="description" content="Hubungi tim Pegon AI untuk pertanyaan, dukungan, atau kolaborasi. Bersama melestarikan warisan budaya nusantara dengan teknologi.">
+    <title>Hubungi Kami - Smart Pegon</title>
+    <meta name="description" content="Hubungi tim Smart Pegon untuk pertanyaan, dukungan, atau kolaborasi. Bersama melestarikan warisan budaya nusantara dengan teknologi.">
     <meta name="keywords" content="kontak pegon ai, dukungan pegon ai, call center pegon, alamat pegon ai, kerjasama pegon, email support pegon">
-    <meta name="author" content="Tim Pegon AI">
+    <meta name="author" content="Tim Smart Pegon">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pegon.ai/landing/contact">
-    <meta property="og:title" content="Hubungi Kami - Pegon AI">
-    <meta property="og:description" content="Tim Pegon AI siap membantu Anda dalam pelestarian budaya melalui teknologi.">
+    <meta property="og:title" content="Hubungi Kami - Smart Pegon">
+    <meta property="og:description" content="Tim Smart Pegon siap membantu Anda dalam pelestarian budaya melalui teknologi.">
     <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
 
     <link rel="canonical" href="https://pegon.ai/landing/contact">
@@ -110,7 +110,7 @@
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
                     <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
                 </a>
                 
@@ -219,7 +219,7 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
-                        <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
+                        <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
                         <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
@@ -250,7 +250,7 @@
             
             <!-- Bottom Bar -->
              <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Hak Cipta Dilindungi Undang-Undang.</p>
+                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Smart Pegon. Hak Cipta Dilindungi Undang-Undang.</p>
                 
                 <!-- Socials -->
                 <div class="flex space-x-4">

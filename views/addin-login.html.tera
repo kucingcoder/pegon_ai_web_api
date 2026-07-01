@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - Pegon AI</title>
+    <title>Masuk - Smart Pegon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { theme: { extend: { colors: { primary: '#06b6d4', secondary: '#ecfeff', }, animation: { 'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both', }, keyframes: { shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } } } } } } </script>
 </head>
@@ -22,7 +22,7 @@
                                 d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                         </svg>
                     </div>
-                    <h3 class="text-gray-900 font-bold text-xl">Pegon AI</h3>
+                    <h3 class="text-gray-900 font-bold text-xl">Smart Pegon</h3>
                     <p class="text-gray-500 text-sm mt-1">Masuk dengan Kode Add-in</p>
                 </div>
 

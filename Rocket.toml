@@ -1,5 +1,5 @@
 [default]
-ident = "Pegon AI"
+ident = "Smart Pegon"
 address = "0.0.0.0"
 port = 8000
 keep_alive = 120

@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitur Pegon AI - Scan Foto, Transliterasi & Belajar</title>
+    <title>Fitur Smart Pegon - Scan Foto, Transliterasi & Belajar</title>
     <meta name="description" content="Satu aplikasi untuk semua kebutuhan Pegon: 1) Scan foto kitab/tulisan tangan jadi teks latin digital (OCR), 2) Convert Latin ke Pegon otomatis, 3) Belajar baca tulis Pegon dengan game seru. Teknologi AI tercanggih untuk santri dan umum.">
     <meta name="keywords" content="pegon, pegon ai, scan pegon, foto ke teks pegon, ocr kitab kuning, transliterasi latin pegon, convert pegon online, belajar aksara arab, game edukasi islam, keyboard arab pegon, nulis pegon di hp, aplikasi santri, baca kitab gundul, teknologi pesantren, pegon translator">
-    <meta name="author" content="Tim Pegon AI">
+    <meta name="author" content="Tim Smart Pegon">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pegon.ai/landing/app">
-    <meta property="og:title" content="Fitur Pegon AI - Scan Foto, Transliterasi & Belajar">
+    <meta property="og:title" content="Fitur Smart Pegon - Scan Foto, Transliterasi & Belajar">
     <meta property="og:description" content="Scan foto kitab jadi teks, ubah Latin ke Pegon instan, mapun belajar interaktif. Teknologi AI terlengkap." >
     <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://pegon.ai/landing/app">
-    <meta property="twitter:title" content="Fitur Pegon AI - Scan Foto, Transliterasi & Belajar">
+    <meta property="twitter:title" content="Fitur Smart Pegon - Scan Foto, Transliterasi & Belajar">
     <meta property="twitter:description" content="Scan foto kitab jadi teks, ubah Latin ke Pegon instan, mapun belajar interaktif. Teknologi AI terlengkap.">
     <meta property="twitter:image" content="https://pegon.ai/static/images/logo.png">
 
@@ -119,7 +119,7 @@
         <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
             <div class="flex items-center justify-between h-20">
                 <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                    <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-12 h-12 object-contain">
+                    <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-12 h-12 object-contain">
                     <span class="text-gray-900 font-display font-bold text-2xl tracking-tight">PEGON AI</span>
                 </a>
                 
@@ -201,7 +201,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
                 </span>
-                Teknologi Pegon AI v1.0
+                Teknologi Smart Pegon v1.0
             </div>
             
             <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-gray-900 tracking-tight leading-tight">
@@ -367,7 +367,7 @@
                 <div class="relative z-10 max-w-3xl mx-auto">
                     <h2 class="font-display text-3xl md:text-4xl lg:text-6xl font-bold mb-8 leading-tight">Siap Memulai <br> Perjalanan Anda?</h2>
                     <p class="text-teal-100 text-xl mb-12 leading-relaxed font-light">
-                        Jadilah bagian dari gerakan pelestarian budaya. Unduh Pegon AI sekarang dan rasakan kemudahan teknologi dalam genggaman.
+                        Jadilah bagian dari gerakan pelestarian budaya. Unduh Smart Pegon sekarang dan rasakan kemudahan teknologi dalam genggaman.
                     </p>
                     
                     <a target="_blank" href="https://play.google.com" class="gradient-accent text-white font-bold py-4 px-10 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 inline-flex items-center gap-3 text-lg group">
@@ -386,7 +386,7 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
                      <a href="/" class="flex items-center gap-2 mb-6">
-                        <img src="/static/images/navbar.webp" alt="Pegon AI Logo" class="w-10 h-10 object-contain">
+                        <img src="/static/images/navbar.webp" alt="Smart Pegon Logo" class="w-10 h-10 object-contain">
                         <span class="text-gray-900 font-display font-bold text-xl tracking-tight">PEGON AI</span>
                     </a>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-sm">
@@ -417,7 +417,7 @@
             
             <!-- Bottom Bar -->
              <div class="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Pegon AI. Hak Cipta Dilindungi Undang-Undang.</p>
+                <p class="text-gray-400 text-sm text-center md:text-left">© 2026 Smart Pegon. Hak Cipta Dilindungi Undang-Undang.</p>
                 
                 <!-- Socials -->
                 <div class="flex space-x-4">
