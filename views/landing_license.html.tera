@@ -9,10 +9,10 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pegon.ai/landing/license">
+    <meta property="og:url" content="https://smartpegon.nouren.web.id/landing/license">
     <meta property="og:title" content="Informasi Lisensi & Hak Cipta - Smart Pegon">
     <meta property="og:description" content="Informasi lisensi dan atribusi Smart Pegon.">
-    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
+    <meta property="og:image" content="https://smartpegon.nouren.web.id/static/images/logo.png">
     <link rel="icon" type="image/webp" href="/static/images/navbar.webp">
     
     <!-- Fonts -->

@@ -9,10 +9,10 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pegon.ai/landing/terms">
+    <meta property="og:url" content="https://smartpegon.nouren.web.id/landing/terms">
     <meta property="og:title" content="Syarat & Ketentuan - Smart Pegon">
     <meta property="og:description" content="Ketentuan penggunaan layanan Smart Pegon.">
-    <meta property="og:image" content="https://pegon.ai/static/images/logo.png">
+    <meta property="og:image" content="https://smartpegon.nouren.web.id/static/images/logo.png">
     <link rel="icon" type="image/webp" href="/static/images/navbar.webp">
     
     <!-- Fonts -->
