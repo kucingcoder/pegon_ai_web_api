@@ -236,6 +236,34 @@ pub async fn update_title(
     Ok(Status::Ok)
 }
 
+#[delete("/transliteration/image/history/<id>")]
+pub async fn delete(
+    db: &State<DatabaseConnection>,
+    auth: AuthenticatedUser,
+    id: String,
+) -> Result<Status, (Status, String)> {
+    let db = db as &DatabaseConnection;
+
+    let parsed_id = Uuid::parse_str(&id)
+        .map_err(|_| (Status::BadRequest, "Format ID tidak valid".to_string()))?;
+
+    let image_transliteration = image_transliteration_model::Entity::find()
+        .filter(image_transliteration_model::Column::IdUser.eq(auth.id))
+        .filter(image_transliteration_model::Column::Id.eq(parsed_id))
+        .one(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Db Error".to_string()))?
+        .ok_or((Status::NotFound, "Data not found".to_string()))?;
+
+    // Menghapus data dari database
+    image_transliteration_model::Entity::delete_by_id(image_transliteration.id)
+        .exec(db)
+        .await
+        .map_err(|_| (Status::InternalServerError, "Gagal menghapus data".to_string()))?;
+
+    Ok(Status::Ok)
+}
+
 async fn call_llama_cpp_vision(client: &Client, image_path: &Path, ext: &str) -> Result<String, String> {
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
