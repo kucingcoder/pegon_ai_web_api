@@ -65,7 +65,7 @@ pub async fn transliterate(
     } else {
         "tanpa harakat".to_string()
     };
-    let generated_result = call_llama_cpp(client, &data.text)
+    let generated_result = call_llama_cpp(client, &data.text, data.harakat)
         .await
         .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
 
@@ -138,7 +138,7 @@ pub async fn add_in_transliterate_handle(
         "tanpa harakat".to_string()
     };
     
-    let generated_result = match call_llama_cpp(client, &data.text).await {
+    let generated_result = match call_llama_cpp(client, &data.text, data.harakat).await {
         Ok(res) => res,
         Err(_) => {
             return Ok(Json(json!({
@@ -171,17 +171,22 @@ pub async fn add_in_transliterate_handle(
     })))
 }
 
-async fn call_llama_cpp(client: &Client, text: &str) -> Result<String, String> {
+async fn call_llama_cpp(client: &Client, text: &str, harakat: bool) -> Result<String, String> {
     let model_url = env::var("MODEL_URL").map_err(|_| "MODEL_URL not set".to_string())?;
     let api_key = env::var("MODEL_API_KEY").unwrap_or_default();
 
+    let system_prompt = if harakat {
+        "You are an expert transliteration engine specializing in converting Indonesian and Javanese Latin text into Pegon script (a modified Arabic script traditionally used in the Nusantara region).\n\nYour task is to convert the provided Latin text into Pegon script strictly following these transliteration rules:\n1. Output ONLY the Pegon text. Do not include any introductory text, explanations, or extra characters.\n2. Base Letters: Use standard Arabic letters for common sounds, but strictly use these specific Pegon modifiers for local consonants:\n   - 'C' or 'c' = چ\n   - 'P' or 'p' = ڤ\n   - 'NG' or 'ng' = ڠ\n   - 'G' or 'g' = کٜ\n   - 'NY' or 'ny' = پ\n3. Full Harakat (Vowels): Every consonant must have the appropriate harakat (fathah, kasrah, dammah, sukun).\n4. Specific Pegon Vowel Rules:\n   - 'E' (taling / clear 'e') = fathah followed by ya sukun.\n   - 'E' or 'E'' (pepet / muted 'e') = Arabic maddah above the consonant.\n   - 'O' or 'o' = fathah followed by waw sukun.\n5. Numbers: Convert all Latin numerals into Arabic numerals (٠, ١, ٢, ٣, ٤, ٥, ٦, ٧, ٨, ٩).\n\nStrictly adhere to these rules to maintain the integrity of traditional Indonesian and Javanese Pegon orthography. Do not use standard Malay Jawi variants."
+    } else {
+        "You are an expert transliteration engine specializing in converting Indonesian and Javanese Latin text into Pegon script (a modified Arabic script traditionally used in the Nusantara region).\n\nYour task is to convert the provided Latin text into bare Pegon script (Pegon Gundul / without harakat) strictly following these transliteration rules:\n1. Output ONLY the Pegon text. Do not include any introductory text, explanations, or extra characters.\n2. Base Letters: Use standard Arabic letters for common sounds, but strictly use these specific Pegon modifiers for local consonants:\n   - 'C' or 'c' = چ\n   - 'P' or 'p' = ڤ\n   - 'NG' or 'ng' = ڠ\n   - 'G' or 'g' = کٜ\n   - 'NY' or 'ny' = پ\n3. NO HARAKAT (Gundul): Absolutely do NOT use any vowel diacritics (fathah, kasrah, dammah, sukun, maddah, or tanwin). The output must be completely bare consonants and vowel letters (alif, waw, ya) according to standard Pegon spelling.\n5. Numbers: Convert all Latin numerals into Arabic numerals (٠, ١, ٢, ٣, ٤, ٥, ٦, ٧, ٨, ٩).\n\nStrictly adhere to these rules to maintain the integrity of traditional Indonesian and Javanese Pegon orthography. Do not use standard Malay Jawi variants."
+    };
     
     // Append instruction to ensure the model follows context (harakat preference)
     let request_body = json!({
         "messages": [
             {
                 "role": "system",
-                "content": "You are a machine that converts Latin script into Pegon/Jawi script. Convert user-supplied text into Pegon text with full vowels."
+                "content": system_prompt
             },
             {
                 "role": "user",
