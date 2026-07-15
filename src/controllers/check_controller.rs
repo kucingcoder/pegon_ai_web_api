@@ -306,7 +306,10 @@ pub async fn check_write(
             
         let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
             .await
-            .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
+            .map_err(|e| {
+                eprintln!("[ERROR] Validasi Tulisan Llama.cpp Gagal: {}", e);
+                (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string())
+            })?;
 
         // Cleanup temp file
         let _ = std::fs::remove_file(&save_path);
@@ -441,11 +444,15 @@ async fn call_llama_cpp_vision(client: &Client, image_path: &std::path::Path, ex
         .json(&request_body)
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            eprintln!("[ERROR] Reqwest Gagal ke {}: {}", url, e);
+            e.to_string()
+        })?;
 
     if !resp.status().is_success() {
         let status = resp.status();
         let text = resp.text().await.unwrap_or_default();
+        eprintln!("[ERROR] Model API Response {}: {}", status, text);
         return Err(format!("Model API Error {}: {}", status, text));
     }
 

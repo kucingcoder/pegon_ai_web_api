@@ -96,7 +96,10 @@ pub async fn transliterate(
     
     let result = call_llama_cpp_vision(client, &save_path, ext)
         .await
-        .map_err(|_| (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string()))?;
+        .map_err(|e| {
+            eprintln!("[ERROR] Transliterasi Gambar Llama.cpp Gagal: {}", e);
+            (Status::InternalServerError, "Gagal (Model dalam pemeliharaan)".to_string())
+        })?;
     let title = chrono::Utc::now().format("%d-%m-%Y %H:%M").to_string();
 
     let new_image_transliteration = image_transliteration_model::ActiveModel {
@@ -299,11 +302,15 @@ async fn call_llama_cpp_vision(client: &Client, image_path: &Path, ext: &str) ->
         .json(&request_body)
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            eprintln!("[ERROR] Reqwest Gagal ke {}: {}", url, e);
+            e.to_string()
+        })?;
 
     if !resp.status().is_success() {
         let status = resp.status();
         let text = resp.text().await.unwrap_or_default();
+        eprintln!("[ERROR] Model API Response {}: {}", status, text);
         return Err(format!("Model API Error {}: {}", status, text));
     }
 
