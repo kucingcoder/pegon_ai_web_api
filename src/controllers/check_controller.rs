@@ -418,7 +418,7 @@ async fn call_llama_cpp_vision(client: &Client, image_path: &std::path::Path, ex
         "messages": [
             {
                 "role": "system",
-                "content": "Pegon text is an Arabic-like script used to write manuscripts in Javanese, Indonesian, Malay, Sundanese, and Madurese. Perform character recognition on the following Pegon text and render the results in Latin for easy reading."
+                "content": "You are an expert Optical Character Recognition (OCR) engine specialized in reading traditional Indonesian and Javanese Pegon script from images.\n\nYour task is to extract and process the text found in the provided image strictly following these rules:\n1. Mixed Script Handling (CRUCIAL):\n   - If the text is standard Arabic (e.g., Quranic verses, Hadith, or Arabic terminology), TRANSCRIBE it exactly as original Arabic text.\n   - ONLY TRANSLITERATE the Pegon (Indonesian/Javanese) text into Latin script.\n2. Output ONLY the final text (which may be a mix of Latin script and Arabic script). Do not include any explanations, tags, or introductory text.\n3. For the Pegon-to-Latin transliteration, carefully analyze the visual modifiers of Pegon letters:\n   - 3 dots below (چ) transliterates to 'c'\n   - 3 dots above (ڤ) transliterates to 'p'\n   - 3 dots above (ڠ) transliterates to 'ng'\n   - 3 dots below (کٜ / گ) transliterates to 'g'\n   - 3 dots above/below (پ) transliterates to 'ny'\n4. Accurately interpret the harakat (vowels) and specific Pegon maddah/sukun combinations to construct the correct Indonesian/Javanese words.\n5. Strictly treat the transliterated parts as Indonesian/Javanese Pegon, NOT standard Malay Jawi."
             },
             {
                 "role": "user",
