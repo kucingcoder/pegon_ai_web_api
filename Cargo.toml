@@ -25,3 +25,4 @@ reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
 sha2 = "0.10.9"
 hex = "0.4.3"
 base64 = "0.22.1"
+image = "0.24"

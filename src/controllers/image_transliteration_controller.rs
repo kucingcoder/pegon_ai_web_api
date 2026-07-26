@@ -92,6 +92,13 @@ pub async fn transliterate(
         .await
         .map_err(|_| (Status::InternalServerError, "Gagal simpan file".to_string()))?;
 
+    if let Ok(img) = image::open(&save_path) {
+        if img.width() > img.height() {
+            let rotated = img.rotate90();
+            let _ = rotated.save(&save_path);
+        }
+    }
+
     let url = make_full_url(&format!("transliterations/{}", filename));
     
     let result = call_llama_cpp_vision(client, &save_path, ext)

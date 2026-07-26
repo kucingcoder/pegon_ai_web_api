@@ -304,6 +304,13 @@ pub async fn check_write(
         data.image.persist_to(&save_path).await
             .map_err(|_| (Status::InternalServerError, "Gagal proses file".to_string()))?;
             
+        if let Ok(img) = image::open(&save_path) {
+            if img.width() > img.height() {
+                let rotated = img.rotate90();
+                let _ = rotated.save(&save_path);
+            }
+        }
+            
         let detected_text = call_llama_cpp_vision(client, &save_path, "jpg")
             .await
             .map_err(|e| {
