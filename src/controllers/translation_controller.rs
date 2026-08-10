@@ -19,7 +19,7 @@ pub async fn translate(
 ) -> Result<Json<Value>, (Status, String)> {
     let api_key = env::var("GEMINI_API_KEY").map_err(|_| (Status::InternalServerError, "GEMINI_API_KEY not set".to_string()))?;
     
-    let url = format!("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={}", api_key);
+    let url = format!("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={}", api_key);
     
     let request_body = json!({
         "contents": [{
