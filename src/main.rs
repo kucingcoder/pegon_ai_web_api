@@ -89,7 +89,8 @@ async fn rocket() -> _ {
                 controllers::transaction_controller::history,
                 controllers::transaction_controller::info,
                 controllers::transaction_controller::status,
-                controllers::transaction_controller::notification
+                controllers::transaction_controller::notification,
+                controllers::translation_controller::translate
             ],
         )
 }

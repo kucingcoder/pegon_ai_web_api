@@ -4,4 +4,5 @@ pub mod home_controller;
 pub mod image_transliteration_controller;
 pub mod text_transliteration_controller;
 pub mod transaction_controller;
+pub mod translation_controller;
 pub mod user_controller;
