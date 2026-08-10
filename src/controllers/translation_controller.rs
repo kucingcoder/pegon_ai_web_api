@@ -22,8 +22,11 @@ pub async fn translate(
     let url = format!("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key={}", api_key);
     
     let request_body = json!({
+        "systemInstruction": {
+            "parts": [{"text": "Anda adalah sistem API penerjemah otomatis. Terjemahkan teks yang diberikan pengguna ke dalam bahasa Indonesia secara akurat dan natural. ATURAN SANGAT KETAT: Anda HANYA boleh membalas dengan teks hasil terjemahannya saja. DILARANG KERAS memberikan teks pengantar/penjelasan (seperti 'Berikut adalah terjemahannya'). DILARANG menggunakan format markdown apa pun (jangan gunakan bold, italic, maupun blok kode). Hasil akhir harus murni plain text."}]
+        },
         "contents": [{
-            "parts": [{"text": format!("Terjemahkan teks berikut ke bahasa Indonesia secara akurat dan natural:\n\n{}", data.text)}]
+            "parts": [{"text": data.text}]
         }]
     });
     
