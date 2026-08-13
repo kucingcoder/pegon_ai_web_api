@@ -6,3 +6,4 @@ pub mod text_transliteration_controller;
 pub mod transaction_controller;
 pub mod translation_controller;
 pub mod user_controller;
+pub mod kajian_controller;

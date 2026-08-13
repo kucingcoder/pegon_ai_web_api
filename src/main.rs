@@ -90,7 +90,8 @@ async fn rocket() -> _ {
                 controllers::transaction_controller::info,
                 controllers::transaction_controller::status,
                 controllers::transaction_controller::notification,
-                controllers::translation_controller::translate
+                controllers::translation_controller::translate,
+                controllers::kajian_controller::generate_kajian
             ],
         )
 }
