@@ -60,7 +60,7 @@ pub async fn generate_kajian(
         .map_err(|_| (Status::InternalServerError, "ELEVENLABS_API_KEY not set".to_string()))?;
     
     let elevenlabs_voice_id = env::var("ELEVENLABS_VOICE_ID")
-        .map_err(|_| (Status::InternalServerError, "ELEVENLABS_VOICE_ID not set. Silakan dapatkan Voice ID dari dashboard ElevenLabs Anda (hindari library voice jika Anda pengguna free plan).".to_string()))?;
+        .unwrap_or_else(|_| "2EiwWnXFnvU5JabPnv8n".to_string()); // Default ke Clyde (Free standard voice)
         
     let elevenlabs_url = format!("https://api.elevenlabs.io/v1/text-to-speech/{}/stream", elevenlabs_voice_id);
     
