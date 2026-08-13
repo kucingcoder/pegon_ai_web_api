@@ -60,7 +60,7 @@ pub async fn generate_kajian(
         .map_err(|_| (Status::InternalServerError, "ELEVENLABS_API_KEY not set".to_string()))?;
     
     let elevenlabs_voice_id = env::var("ELEVENLABS_VOICE_ID")
-        .unwrap_or_else(|_| "pNInz6obbf5AWCGq5RmY".to_string()); // Default voice if empty/not set
+        .map_err(|_| (Status::InternalServerError, "ELEVENLABS_VOICE_ID not set. Silakan dapatkan Voice ID dari dashboard ElevenLabs Anda (hindari library voice jika Anda pengguna free plan).".to_string()))?;
         
     let elevenlabs_url = format!("https://api.elevenlabs.io/v1/text-to-speech/{}/stream", elevenlabs_voice_id);
     
