@@ -190,7 +190,7 @@ async fn call_llama_cpp(client: &Client, text: &str, harakat: bool) -> Result<St
             },
             {
                 "role": "user",
-                "content": text
+                "content": text.to_lowercase()
             }
         ]
     });
